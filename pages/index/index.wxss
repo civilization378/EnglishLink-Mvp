@@ -1,0 +1,35 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #222;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.stat {
+  display: block;
+  font-size: 28rpx;
+  color: #444;
+  margin-bottom: 10rpx;
+}
+.secondary-btn {
+  margin-top: 10rpx;
+}

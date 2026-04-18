@@ -1,0 +1,12 @@
+<view class="container">
+  <text class="title">English Link MVP 启动成功</text>
+
+  <view class="card">
+    <text class="card-title">学习统计</text>
+    <text class="stat">已学习次数：{{total}}</text>
+    <text class="stat">答对次数：{{correct}}</text>
+  </view>
+
+  <button bindtap="goStudy">开始学习</button>
+  <button bindtap="goMy" class="secondary-btn">查看我的学习</button>
+</view>

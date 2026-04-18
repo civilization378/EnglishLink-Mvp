@@ -1,0 +1,9 @@
+{
+  "desc": "English Link MVP sitemap",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

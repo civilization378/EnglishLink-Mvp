@@ -1,0 +1,16 @@
+<view class="container">
+  <text class="title">{{isCorrect ? '回答正确' : '回答错误'}}</text>
+
+  <view class="card">
+    <text class="label">题目</text>
+    <text class="content">{{question}}</text>
+  </view>
+
+  <view class="card">
+    <text class="label">解释</text>
+    <text class="content">{{explanation}}</text>
+  </view>
+
+  <button bindtap="goBackHome">返回首页</button>
+  <button bindtap="goNext" class="next-btn">继续学习</button>
+</view>

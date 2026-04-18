@@ -1,0 +1,33 @@
+<view class="container">
+  <text class="title">{{currentVideo.title}}</text>
+  <text class="subtitle">{{currentVideo.subtitle}}</text>
+
+  <view class="section">
+    <text class="section-title">词汇释义</text>
+    <block wx:for="{{currentVideo.glossary}}" wx:key="word">
+      <view class="glossary-item">
+        <text class="word">{{item.word}}</text>
+        <text class="meaning">{{item.meaning}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="section">
+    <text class="section-title">理解题</text>
+    <text class="question">{{currentVideo.question}}</text>
+
+    <block wx:for="{{currentVideo.options}}" wx:key="index">
+      <view 
+        class="option {{selectedIndex == index ? 'active' : ''}}"
+        data-index="{{index}}"
+        bindtap="chooseOption"
+      >
+        {{item}}
+      </view>
+    </block>
+  </view>
+
+  <button bindtap="submitAnswer">提交答案</button>
+
+  <text class="result">{{resultText}}</text>
+</view>

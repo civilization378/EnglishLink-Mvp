@@ -1,0 +1,68 @@
+.container {
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.stat {
+  display: block;
+  font-size: 28rpx;
+  color: #444;
+  margin-bottom: 10rpx;
+}
+
+.record-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 8rpx;
+}
+
+.record-question {
+  display: block;
+  font-size: 26rpx;
+  color: #555;
+  margin-bottom: 8rpx;
+}
+
+.record-result {
+  display: block;
+  font-size: 26rpx;
+  color: #2c7;
+  margin-bottom: 8rpx;
+}
+
+.record-time {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty {
+  color: #999;
+  font-size: 26rpx;
+}

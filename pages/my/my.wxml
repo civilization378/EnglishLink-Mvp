@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="card">
+    <text class="card-title">我的学习统计</text>
+    <text class="stat">已学习次数：{{total}}</text>
+    <text class="stat">答对次数：{{correct}}</text>
+  </view>
+
+  <view class="card">
+    <text class="card-title">最近学习记录</text>
+
+    <block wx:if="{{history.length > 0}}">
+      <block wx:for="{{history}}" wx:key="index">
+        <view class="record-item">
+          <text class="record-title">{{item.title}}</text>
+          <text class="record-question">{{item.question}}</text>
+          <text class="record-result">
+            结果：{{item.isCorrect ? '回答正确' : '回答错误'}}
+          </text>
+          <text class="record-time">时间：{{item.time}}</text>
+        </view>
+      </block>
+    </block>
+
+    <block wx:else>
+      <text class="empty">还没有学习记录</text>
+    </block>
+  </view>
+</view>
