@@ -1,5 +1,6 @@
 <view class="container">
-  <text class="title">English Link MVP 启动成功</text>
+  <text class="title">English Link MVP</text>
+  <text class="desc">用真实场景训练英语直接理解</text>
 
   <view class="card">
     <text class="card-title">学习统计</text>
@@ -7,6 +8,14 @@
     <text class="stat">答对次数：{{correct}}</text>
   </view>
 
-  <button bindtap="goStudy">开始学习</button>
+  <view class="card recommend-card">
+    <text class="card-title">今日推荐</text>
+    <text class="video-title">{{todayVideo.title}}</text>
+    <text class="video-info">场景：{{todayVideo.sceneName}}</text>
+    <text class="video-info">难度：{{todayVideo.level}}</text>
+    <text class="subtitle-preview">{{todayVideo.subtitle}}</text>
+  </view>
+
+  <button bindtap="goStudy">开始今日学习</button>
   <button bindtap="goMy" class="secondary-btn">查看我的学习</button>
 </view>

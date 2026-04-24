@@ -6,9 +6,15 @@
 }
 
 .title {
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: bold;
   color: #222;
+}
+
+.desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-top: -18rpx;
 }
 
 .card {
@@ -30,6 +36,34 @@
   color: #444;
   margin-bottom: 10rpx;
 }
+
+.recommend-card {
+  border: 2rpx solid #e8eefc;
+}
+
+.video-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 12rpx;
+}
+
+.video-info {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.subtitle-preview {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
 .secondary-btn {
   margin-top: 10rpx;
 }

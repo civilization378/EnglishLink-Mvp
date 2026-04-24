@@ -1,7 +1,10 @@
+const { videos } = require('../../data/videos')
+
 Page({
   data: {
     total: 0,
-    correct: 0
+    correct: 0,
+    todayVideo: {}
   },
 
   onShow() {
@@ -12,13 +15,14 @@ Page({
 
     this.setData({
       total: stats.total,
-      correct: stats.correct
+      correct: stats.correct,
+      todayVideo: videos[0]
     })
   },
 
   goStudy() {
     wx.navigateTo({
-      url: '/pages/study/study'
+      url: '/pages/study/study?index=0'
     })
   },
 
