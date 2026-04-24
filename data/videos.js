@@ -4,6 +4,7 @@ const videos = [
     title: "Ordering Coffee",
     scene: "daily",
     level: "A1",
+    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
     subtitle: "I'd like a small coffee, please.",
     glossary: [
       { word: "small", meaning: "not large" },

@@ -1,5 +1,16 @@
 <view class="container">
   <text class="title">{{currentVideo.title}}</text>
+
+  <view class="video-card">
+    <video
+      class="video-player"
+      src="{{currentVideo.videoUrl}}"
+      controls
+      autoplay="{{false}}"
+      object-fit="cover"
+    ></video>
+  </view>
+
   <text class="subtitle">{{currentVideo.subtitle}}</text>
 
   <view class="section">
