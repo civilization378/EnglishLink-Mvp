@@ -5,6 +5,7 @@ Page({
     explanation: '',
     nextIndex: 0,
     hasNext: false
+    
   },
 
   onLoad(options) {

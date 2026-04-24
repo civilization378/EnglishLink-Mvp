@@ -5,7 +5,8 @@ Page({
     currentVideo: {},
     currentIndex: 0,
     selectedIndex: -1,
-    resultText: ''
+    resultText: '',
+    showChineseHint: false
   },
 
   onLoad(options) {
@@ -15,7 +16,14 @@ Page({
       currentIndex: index,
       currentVideo: videos[index],
       selectedIndex: -1,
-      resultText: ''
+      resultText: '',
+      showChineseHint: false
+    })
+  },
+
+  toggleChineseHint() {
+    this.setData({
+      showChineseHint: !this.data.showChineseHint
     })
   },
 
