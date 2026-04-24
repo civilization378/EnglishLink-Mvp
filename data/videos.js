@@ -85,6 +85,60 @@ const videos = [
       answerIndex: 1,
       explanation: "'Long time no see' means they haven't met for a long time."
     }
+  },
+  {
+    id: 4,
+    title: "Paying at a Store",
+    scene: "shopping",
+    sceneName: "购物场景",
+    level: "A1",
+    videoUrl: testVideoUrl,
+    subtitle: "Can I pay by card?",
+    glossary: [
+      {
+        word: "pay",
+        meaning: "give money for something",
+        chineseHint: "支付"
+      },
+      {
+        word: "card",
+        meaning: "a bank card or credit card",
+        chineseHint: "银行卡"
+      }
+    ],
+    question: {
+      text: "What does the speaker want to do?",
+      options: ["Pay with cash", "Pay by card", "Return the item"],
+      answerIndex: 1,
+      explanation: "The speaker asks: Can I pay by card? So they want to use a card."
+    }
+  },
+  {
+    id: 5,
+    title: "Asking for Directions",
+    scene: "daily",
+    sceneName: "日常交流",
+    level: "A1",
+    videoUrl: testVideoUrl,
+    subtitle: "How can I get to the station?",
+    glossary: [
+      {
+        word: "get to",
+        meaning: "arrive at a place",
+        chineseHint: "到达"
+      },
+      {
+        word: "station",
+        meaning: "a place for trains or buses",
+        chineseHint: "车站"
+      }
+    ],
+    question: {
+      text: "Where does the speaker want to go?",
+      options: ["The station", "The hotel", "The store"],
+      answerIndex: 0,
+      explanation: "The speaker asks how to get to the station."
+    }
   }
 ]
 
