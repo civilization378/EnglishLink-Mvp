@@ -38,7 +38,7 @@ Page({
       return
     }
 
-    const isCorrect = Number(selectedIndex) === currentVideo.answer
+    const isCorrect = Number(selectedIndex) === currentVideo.question.answerIndex
 
     const history = wx.getStorageSync('studyHistory') || []
 
@@ -70,7 +70,7 @@ Page({
     const hasNext = nextIndex < videos.length
 
     wx.navigateTo({
-      url: `/pages/result/result?isCorrect=${isCorrect}&question=${encodeURIComponent(currentVideo.question)}&explanation=${encodeURIComponent(currentVideo.explanation)}&nextIndex=${nextIndex}&hasNext=${hasNext}`
-    })
+  url: `/pages/result/result?isCorrect=${isCorrect}&question=${encodeURIComponent(currentVideo.question.text)}&explanation=${encodeURIComponent(currentVideo.question.explanation)}&nextIndex=${nextIndex}&hasNext=${hasNext}`
+})
   }
 })
