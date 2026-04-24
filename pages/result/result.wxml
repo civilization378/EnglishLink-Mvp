@@ -11,6 +11,7 @@
     <text class="content">{{explanation}}</text>
   </view>
 
-  <button bindtap="goBackHome">返回首页</button>
-  <button bindtap="goNext" class="next-btn">继续学习</button>
+ <button bindtap="goNext" class="next-btn">
+  {{hasNext ? '继续下一条' : '完成学习'}}
+</button>
 </view>
