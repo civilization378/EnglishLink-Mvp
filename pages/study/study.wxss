@@ -11,6 +11,32 @@
   color: #222;
 }
 
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.tag-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tag {
+  display: inline-block;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #eef3ff;
+  color: #3b64c4;
+  font-size: 24rpx;
+}
+
+.level-tag {
+  background: #f0f9f2;
+  color: #29994f;
+}
+
+
 .video-card {
   background: #fff;
   border-radius: 16rpx;

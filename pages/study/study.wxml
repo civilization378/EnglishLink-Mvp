@@ -1,5 +1,12 @@
 <view class="container">
-  <text class="title">{{currentVideo.title}}</text>
+  <view class="header">
+    <text class="title">{{currentVideo.title}}</text>
+
+    <view class="tag-row">
+      <text class="tag">{{currentVideo.sceneName}}</text>
+      <text class="tag level-tag">{{currentVideo.level}}</text>
+    </view>
+  </view>
 
   <view class="video-card">
     <video
