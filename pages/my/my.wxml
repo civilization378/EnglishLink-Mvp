@@ -25,4 +25,6 @@
       <text class="empty">还没有学习记录</text>
     </block>
   </view>
+
+  <button class="clear-btn" bindtap="clearStudyData">清空学习记录</button>
 </view>
