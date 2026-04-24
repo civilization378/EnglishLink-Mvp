@@ -76,6 +76,11 @@ Page({
 
     const nextIndex = currentIndex + 1
     const hasNext = nextIndex < videos.length
+    
+    wx.setStorageSync('studyProgress', {
+  nextIndex: hasNext ? nextIndex : 0,
+  completedAll: !hasNext
+})
 
     wx.navigateTo({
   url: `/pages/result/result?isCorrect=${isCorrect}&question=${encodeURIComponent(currentVideo.question.text)}&explanation=${encodeURIComponent(currentVideo.question.explanation)}&nextIndex=${nextIndex}&hasNext=${hasNext}`

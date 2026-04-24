@@ -10,12 +10,25 @@
 
   <view class="card recommend-card">
     <text class="card-title">今日推荐</text>
-    <text class="video-title">{{todayVideo.title}}</text>
-    <text class="video-info">场景：{{todayVideo.sceneName}}</text>
-    <text class="video-info">难度：{{todayVideo.level}}</text>
-    <text class="subtitle-preview">{{todayVideo.subtitle}}</text>
+
+    <block wx:if="{{completedAll}}">
+      <text class="video-title">本轮学习已完成</text>
+      <text class="video-info">你已经完成全部 {{totalVideos}} 条内容</text>
+      <text class="subtitle-preview">可以重新开始一轮学习。</text>
+    </block>
+
+    <block wx:else>
+      <text class="video-title">{{todayVideo.title}}</text>
+      <text class="video-info">进度：第 {{recommendNumber}} / {{totalVideos}} 条</text>
+      <text class="video-info">场景：{{todayVideo.sceneName}}</text>
+      <text class="video-info">难度：{{todayVideo.level}}</text>
+      <text class="subtitle-preview">{{todayVideo.subtitle}}</text>
+    </block>
   </view>
 
-  <button bindtap="goStudy">开始今日学习</button>
+  <button bindtap="goStudy">
+    {{completedAll ? '重新开始学习' : '开始推荐学习'}}
+  </button>
+
   <button bindtap="goMy" class="secondary-btn">查看我的学习</button>
 </view>

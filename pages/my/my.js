@@ -35,6 +35,7 @@ Page({
         if (res.confirm) {
           wx.removeStorageSync('studyStats')
           wx.removeStorageSync('studyHistory')
+          wx.removeStorageSync('studyProgress')
 
           this.setData({
             total: 0,
