@@ -4,6 +4,7 @@ Page({
   data: {
     total: 0,
     correct: 0,
+    accuracy: 0,
     todayVideo: {},
     recommendIndex: 0,
     recommendNumber: 1,
@@ -25,10 +26,14 @@ Page({
     const totalVideos = videos.length
     const recommendIndex = progress.nextIndex || 0
     const todayVideo = videos[recommendIndex] || {}
+    const accuracy = stats.total > 0
+      ? Math.round((stats.correct / stats.total) * 100)
+      : 0
 
     this.setData({
       total: stats.total,
       correct: stats.correct,
+      accuracy,
       todayVideo,
       recommendIndex,
       recommendNumber: recommendIndex + 1,
