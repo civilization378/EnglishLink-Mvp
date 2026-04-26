@@ -1,17 +1,23 @@
+/* ============================================================
+ * Warm Cinema · 晨光影室 · Study
+ * Dark video stage (warm-dark, never navy) for immersion;
+ * drawer + options + feedback unified into Warm Cinema cream / amber / sage.
+ * ============================================================ */
+
 page {
-  background: #020617;
+  background: #1A1208; /* warm dark stage when video page is open */
 }
 
 /* ============ 根容器：全屏沉浸式 ============ */
 .study-page {
   position: fixed;
   inset: 0;
-  background: #020617;
+  background: #1A1208;
   overflow: hidden;
   color: #FFFFFF;
 }
 
-/* ============ 动画内容层（包裹视频和浮层，panels 不在其内） ============ */
+/* ============ 动画内容层 ============ */
 .slide-content {
   position: absolute;
   inset: 0;
@@ -39,17 +45,7 @@ page {
   animation: slideInFromTop 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes slideInFromBottom {
-  from { opacity: 0; transform: translateY(18rpx); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInFromTop {
-  from { opacity: 0; transform: translateY(-18rpx); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ============ 视频层（铺满整屏） ============ */
+/* ============ 视频层 ============ */
 .video-player {
   position: absolute;
   inset: 0;
@@ -59,24 +55,22 @@ page {
   z-index: 0;
 }
 
-/* 横/竖屏共用全屏容器，object-fit: contain 自然处理两种比例 */
 .video-player-landscape,
 .video-player-portrait {
-  /* 视觉上仅作占位标识，避免误删；实际尺寸由父级 100% 控制 */
+  /* Sized by parent */
 }
 
-/* 切换过渡遮罩：始终在 DOM 中，双向 opacity 过渡，防旧帧抽搐 */
+/* Switch mask: warm-dark instead of navy */
 .switch-mask {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.55));
+  background: linear-gradient(180deg, rgba(26, 18, 8, 0.75), rgba(26, 18, 8, 0.55));
   z-index: 1;
   pointer-events: none;
   opacity: 0;
   transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 遮罩激活态：渐入到 0.65，不完全纯黑，保留画面层次感 */
 .switch-mask-active {
   opacity: 0.65;
 }
@@ -109,7 +103,7 @@ page {
   margin-left: 8rpx;
 }
 
-/* 顶部 / 底部柔光蒙层，提升白色文字可读性 */
+/* 顶部 / 底部柔光蒙层（warm-dark 替代 navy） */
 .video-mask {
   position: absolute;
   inset: 0;
@@ -118,10 +112,10 @@ page {
   background:
     linear-gradient(
       to bottom,
-      rgba(2, 6, 23, 0.55) 0%,
-      rgba(2, 6, 23, 0) 18%,
-      rgba(2, 6, 23, 0) 58%,
-      rgba(2, 6, 23, 0.78) 100%
+      rgba(26, 18, 8, 0.55) 0%,
+      rgba(26, 18, 8, 0) 18%,
+      rgba(26, 18, 8, 0) 58%,
+      rgba(26, 18, 8, 0.78) 100%
     );
 }
 
@@ -139,15 +133,25 @@ page {
 }
 
 .back-btn {
+  position: relative;
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.55);
-  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255, 255, 255, 0.30) 0%,
+      rgba(255, 255, 255, 0) 50%),
+    rgba(42, 33, 24, 0.46);
+  border: 1rpx solid rgba(255, 255, 255, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(12rpx);
+  backdrop-filter: blur(20rpx) saturate(1.1);
+  -webkit-backdrop-filter: blur(20rpx) saturate(1.1);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1rpx 0 rgba(0, 0, 0, 0.18),
+    0 6rpx 18rpx rgba(0, 0, 0, 0.20);
   transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -166,8 +170,8 @@ page {
 .progress-pill {
   padding: 8rpx 20rpx;
   border-radius: 999rpx;
-  background: rgba(15, 23, 42, 0.55);
-  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  background: rgba(42, 33, 24, 0.55);
+  border: 1rpx solid rgba(247, 241, 232, 0.14);
   backdrop-filter: blur(12rpx);
 }
 
@@ -178,7 +182,7 @@ page {
   font-weight: 500;
 }
 
-/* ============ 右侧悬浮按钮栏 ============ */
+/* ============ 右侧悬浮按钮栏（warm-dark 玻璃，琥珀强调） ============ */
 .action-bar {
   position: absolute;
   right: 22rpx;
@@ -207,15 +211,27 @@ page {
 }
 
 .action-circle {
+  position: relative;
   width: 92rpx;
   height: 92rpx;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.55);
-  border: 1rpx solid rgba(255, 255, 255, 0.10);
+  /* 多层暖灰玻璃：左上一点白光 + 主色暖灰半透明 */
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255, 255, 255, 0.30) 0%,
+      rgba(255, 255, 255, 0) 50%),
+    rgba(42, 33, 24, 0.46);
+  border: 1rpx solid rgba(255, 255, 255, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(14rpx);
+  backdrop-filter: blur(20rpx) saturate(1.1);
+  -webkit-backdrop-filter: blur(20rpx) saturate(1.1);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1rpx 0 rgba(0, 0, 0, 0.18),
+    0 10rpx 24rpx rgba(0, 0, 0, 0.24);
+  overflow: hidden;
   transition:
     background 180ms cubic-bezier(0.22, 1, 0.36, 1),
     border 180ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -223,46 +239,78 @@ page {
     transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Soft specular dot on each glass button — 不再是胶带，是一颗光点 */
+.action-circle::before {
+  content: "";
+  position: absolute;
+  top: 14rpx;
+  left: 22rpx;
+  width: 28rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 70%);
+  filter: blur(2rpx);
+  pointer-events: none;
+}
+
 .action-glyph {
+  position: relative;
   color: #FFFFFF;
   font-size: 32rpx;
   font-weight: 600;
   letter-spacing: 0.5rpx;
+  z-index: 1;
 }
 
 .action-caption {
   font-size: 22rpx;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.84);
   letter-spacing: 0.5rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.45);
 }
 
+/* Active state (字幕/词汇 toggled) — warm amber */
 .action-item.is-active .action-circle {
-  background: rgba(37, 99, 235, 0.85);
-  border: 1rpx solid rgba(255, 255, 255, 0.30);
-  box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.40);
+  background: rgba(217, 154, 43, 0.78);
+  border: 1rpx solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.40),
+    0 10rpx 26rpx rgba(217, 154, 43, 0.42);
 }
 
+/* CTA "?" answer button — warm amber liquid glass halo */
 .action-circle-cta {
-  background: rgba(37, 99, 235, 0.20);
-  border: 1rpx solid rgba(96, 165, 250, 0.55);
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255, 255, 255, 0.40) 0%,
+      rgba(255, 255, 255, 0) 50%),
+    rgba(217, 154, 43, 0.42);
+  border: 1rpx solid rgba(245, 195, 100, 0.65);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1rpx 0 rgba(140, 86, 14, 0.22),
+    0 10rpx 26rpx rgba(217, 154, 43, 0.36);
 }
 
 .action-item-cta .action-glyph {
-  color: #BFDBFE;
+  color: #FFF6E2;
 }
 
+/* Replay variant (kept; sage if used) */
 .action-circle-replay {
-  background: rgba(16, 185, 129, 0.18);
-  border: 1rpx solid rgba(110, 231, 183, 0.55);
-  box-shadow: 0 6rpx 18rpx rgba(16, 185, 129, 0.20);
+  background: rgba(127, 165, 138, 0.22);
+  border: 1rpx solid rgba(127, 165, 138, 0.55);
+  box-shadow: 0 6rpx 18rpx rgba(127, 165, 138, 0.20);
 }
 
 .action-item-replay .action-glyph {
-  color: #A7F3D0;
+  color: #E3EFE6;
 }
 
 .action-item-replay .action-caption {
-  color: rgba(167, 243, 208, 0.92);
+  color: rgba(227, 239, 230, 0.92);
 }
 
 /* ============ 底部信息浮层（视频阶段） ============ */
@@ -293,16 +341,18 @@ page {
   letter-spacing: 0.5rpx;
 }
 
+/* Scene tag — warm amber on dark video */
 .scene-tag {
-  background: rgba(37, 99, 235, 0.22);
-  color: #BFDBFE;
-  border: 1rpx solid rgba(96, 165, 250, 0.40);
+  background: rgba(217, 154, 43, 0.22);
+  color: #FFE4A8;
+  border: 1rpx solid rgba(245, 195, 100, 0.45);
 }
 
+/* Level tag — sage on dark video */
 .level-tag {
-  background: rgba(16, 185, 129, 0.18);
-  color: #A7F3D0;
-  border: 1rpx solid rgba(52, 211, 153, 0.45);
+  background: rgba(127, 165, 138, 0.22);
+  color: #DDF1E2;
+  border: 1rpx solid rgba(127, 165, 138, 0.50);
 }
 
 .bottom-title {
@@ -315,27 +365,40 @@ page {
 }
 
 .subtitle-overlay {
-  margin-top: 4rpx;
+  margin-top: 6rpx;
+  animation: subtitleEnter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 字幕：深色半透明玻璃容器，确保任何视频底色都能读清 */
+.subtitle-glass {
   display: flex;
   flex-direction: column;
   gap: 6rpx;
-  animation: subtitleEnter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  padding: 14rpx 20rpx;
+  border-radius: 20rpx;
+  background: rgba(26, 18, 8, 0.42);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.22),
+    0 6rpx 18rpx rgba(0, 0, 0, 0.20);
+  backdrop-filter: blur(14rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(14rpx) saturate(1.05);
 }
 
 .subtitle-line {
   display: block;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.94);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.55;
-  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.75);
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.55);
   letter-spacing: 0.3rpx;
 }
 
-/* ============ 底部抽屉通用 ============ */
+/* ============ 底部抽屉通用：Warm Cinema 奶油玻璃 ============ */
 .panel-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(2, 6, 23, 0.55);
+  background: rgba(26, 18, 8, 0.55);
   z-index: 20;
   animation: fadeIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -349,11 +412,27 @@ page {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.96);
-  backdrop-filter: blur(20rpx);
-  border-top-left-radius: 32rpx;
-  border-top-right-radius: 32rpx;
-  border-top: 1rpx solid rgba(255, 255, 255, 0.08);
+  /* 多层奶油玻璃：左上白色高光 + 右下暖金角光 + 主体奶油半透明 */
+  background:
+    radial-gradient(circle at 14% 0%,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(255, 255, 255, 0) 32%),
+    radial-gradient(circle at 92% 8%,
+      rgba(231, 175, 80, 0.16) 0%,
+      rgba(231, 175, 80, 0) 38%),
+    rgba(255, 249, 239, 0.94);
+  backdrop-filter: blur(24rpx) saturate(1.12);
+  -webkit-backdrop-filter: blur(24rpx) saturate(1.12);
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.78);
+  border-left: 1rpx solid rgba(255, 255, 255, 0.55);
+  border-right: 1rpx solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1rpx 0 rgba(217, 154, 43, 0.08),
+    0 -22rpx 70rpx rgba(71, 52, 32, 0.20),
+    0 -6rpx 18rpx rgba(71, 52, 32, 0.08);
   padding: 16rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
   z-index: 21;
   animation: panelSlideUp 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -361,18 +440,42 @@ page {
   flex-direction: column;
 }
 
+/* Soft warm glow stripe just above the panel — bridges video to drawer */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -1rpx;
+  left: 18%;
+  right: 18%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.92) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
 .panel.panel-closing {
   animation: panelSlideDown 260ms cubic-bezier(0.4, 0, 1, 0.6) both;
 }
 
 .panel-handle {
-  width: 80rpx;
-  height: 6rpx;
+  width: 72rpx;
+  height: 5rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.22);
-  margin: 0 auto 20rpx;
+  /* 浅棕 / 半透明金的精致 handle */
+  background: linear-gradient(
+    90deg,
+    rgba(217, 154, 43, 0) 0%,
+    rgba(217, 154, 43, 0.42) 50%,
+    rgba(217, 154, 43, 0) 100%
+  );
+  margin: 4rpx auto 22rpx;
 }
 
+/* 默认行布局：词汇抽屉等单行 header 沿用原有横向布局 */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -380,18 +483,56 @@ page {
   margin-bottom: 24rpx;
 }
 
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 16rpx;
+}
+
+/* 答题结果状态：把 header 切换为纵向布局，让副文案换行显示 */
+.panel-header-result {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10rpx;
+  margin-bottom: 28rpx;
+}
+
 .panel-title {
-  font-size: 32rpx;
+  font-size: 26rpx;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   letter-spacing: 0.5rpx;
   transition: color 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .panel-tag {
   font-size: 22rpx;
-  color: rgba(255, 255, 255, 0.55);
+  color: #A99B8C;
+  color: var(--text-faint, #A99B8C);
   letter-spacing: 1rpx;
+  font-weight: 500;
+}
+
+/* 答题结果：副文案，柔和不刺眼 */
+.panel-subtitle {
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0.3rpx;
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
+  animation: resultFadeIn 280ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+}
+
+.panel-subtitle-correct {
+  color: #5C9B7A;
+}
+
+.panel-subtitle-wrong {
+  color: #B86A5E;
 }
 
 /* ============ 词汇抽屉 ============ */
@@ -407,30 +548,32 @@ page {
 .hint-toggle {
   padding: 6rpx 16rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1rpx solid rgba(255, 255, 255, 0.10);
+  background: rgba(80, 60, 40, 0.06);
+  border: 1rpx solid rgba(80, 60, 40, 0.10);
   transition: all 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hint-toggle.is-on {
-  background: rgba(255, 255, 255, 0.14);
-  border: 1rpx solid rgba(255, 255, 255, 0.20);
+  background: rgba(217, 154, 43, 0.14);
+  border: 1rpx solid rgba(217, 154, 43, 0.32);
 }
 
 .hint-toggle-text {
   font-size: 20rpx;
-  color: rgba(255, 255, 255, 0.65);
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
   font-weight: 500;
   letter-spacing: 0.3rpx;
 }
 
 .hint-toggle.is-on .hint-toggle-text {
-  color: rgba(255, 255, 255, 0.88);
+  color: #B97818;
+  color: var(--primary-press, #B97818);
 }
 
 .glossary-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1rpx solid rgba(80, 60, 40, 0.08);
 }
 
 .glossary-item:last-child {
@@ -440,8 +583,9 @@ page {
 .word {
   display: block;
   font-size: 30rpx;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-weight: 700;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   margin-bottom: 6rpx;
   letter-spacing: 0.3rpx;
 }
@@ -449,14 +593,16 @@ page {
 .meaning {
   display: block;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.72);
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   line-height: 1.55;
 }
 
 .chinese-hint {
   display: block;
   font-size: 24rpx;
-  color: rgba(191, 219, 254, 0.92);
+  color: #B97818;
+  color: var(--primary-press, #B97818);
   margin-top: 8rpx;
   line-height: 1.5;
 }
@@ -473,10 +619,11 @@ page {
 
 .question-text {
   display: block;
-  font-size: 32rpx;
-  font-weight: 500;
-  color: #FFFFFF;
-  line-height: 1.5;
+  font-size: 33rpx;
+  font-weight: 700;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
+  line-height: 1.4;
   margin-bottom: 24rpx;
   letter-spacing: 0.3rpx;
 }
@@ -489,13 +636,21 @@ page {
 }
 
 .option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 18rpx;
   padding: 22rpx 24rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1rpx solid rgba(255, 255, 255, 0.08);
-  border-radius: 16rpx;
+  background:
+    radial-gradient(circle at 20% 0%,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 55%),
+    rgba(255, 255, 255, 0.48);
+  border: 1rpx solid rgba(255, 255, 255, 0.7);
+  border-radius: 20rpx;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
+    0 4rpx 14rpx rgba(88, 61, 32, 0.05);
   transition:
     background 160ms cubic-bezier(0.22, 1, 0.36, 1),
     border 160ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -508,13 +663,15 @@ page {
   width: 48rpx;
   height: 48rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1rpx solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1rpx solid rgba(80, 60, 40, 0.12);
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.85);
   text-align: center;
   line-height: 48rpx;
   font-size: 24rpx;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  color: #7C6F62;
+  letter-spacing: 0.3rpx;
   transition:
     background 160ms cubic-bezier(0.22, 1, 0.36, 1),
     border 160ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -524,27 +681,52 @@ page {
 .option-text {
   flex: 1;
   font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.92);
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   line-height: 1.5;
   transition: color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Selected option — amber glass with left amber accent */
 .option.active {
-  background: rgba(37, 99, 235, 0.18);
-  border: 2rpx solid #2563EB;
-  padding: 21rpx 23rpx;
-  box-shadow: 0 0 0 4rpx rgba(37, 99, 235, 0.14);
+  background:
+    radial-gradient(circle at 20% 0%,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0) 55%),
+    rgba(217, 154, 43, 0.14);
+  border: 1rpx solid rgba(217, 154, 43, 0.55);
+  padding: 22rpx 24rpx;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.55),
+    0 0 0 3rpx rgba(217, 154, 43, 0.14),
+    0 8rpx 22rpx rgba(217, 154, 43, 0.18);
+}
+
+.option.active::before {
+  content: "";
+  position: absolute;
+  top: 16rpx;
+  bottom: 16rpx;
+  left: 0;
+  width: 4rpx;
+  border-radius: 0 4rpx 4rpx 0;
+  background: linear-gradient(180deg, #E5AB46 0%, #D99A2B 100%);
 }
 
 .option.active .option-index {
-  background: #2563EB;
-  border-color: #2563EB;
+  background: #D99A2B;
+  background: linear-gradient(180deg, #E5AB46 0%, #D99A2B 100%);
+  border-color: rgba(255, 255, 255, 0.55);
   color: #FFFFFF;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.45),
+    0 4rpx 12rpx rgba(217, 154, 43, 0.32);
 }
 
 .option.active .option-text {
-  color: #FFFFFF;
-  font-weight: 500;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
+  font-weight: 600;
 }
 
 .panel-footer {
@@ -554,29 +736,80 @@ page {
   gap: 12rpx;
 }
 
+/* ============ Primary CTA in drawer (amber lamp glass) ============ */
 .primary-btn {
+  position: relative;
   width: 100%;
   height: 92rpx;
   line-height: 92rpx;
-  background: #2563EB;
+  background: #D99A2B;
+  background: linear-gradient(180deg, #E8B14C 0%, #DC9F30 55%, #C0851A 100%);
   color: #FFFFFF;
   font-size: 30rpx;
-  font-weight: 600;
-  letter-spacing: 1rpx;
-  border-radius: 16rpx;
+  font-weight: 700;
+  letter-spacing: 1.2rpx;
+  border-radius: 999rpx;
   border: none;
-  box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.32);
-  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* 顶 inset 暖白 + 底 inset 暗金 + 外阴影：胶囊有厚度 */
+  box-shadow:
+    inset 0 2rpx 0 rgba(255, 232, 184, 0.55),
+    inset 0 -2rpx 4rpx rgba(140, 86, 14, 0.20),
+    0 16rpx 36rpx rgba(217, 154, 43, 0.34),
+    0 6rpx 14rpx rgba(217, 154, 43, 0.20);
+  overflow: hidden;
+  transition:
+    background 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .primary-btn::after {
   border: none;
 }
 
+/* 替代以前的横向白胶带：上方一团柔和奶油光斑（液态高光） */
+.primary-btn::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 18%;
+  right: 18%;
+  height: 130%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 245, 220, 0.50) 0%,
+    rgba(255, 245, 220, 0) 65%);
+  filter: blur(10rpx);
+  pointer-events: none;
+}
+
 .primary-btn:active {
-  background: #1D4ED8;
-  box-shadow: 0 4rpx 12rpx rgba(37, 99, 235, 0.30);
-  opacity: 0.88;
+  background: linear-gradient(180deg, #C7872A 0%, #A86B14 100%);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1rpx 0 rgba(140, 86, 14, 0.20),
+    0 8rpx 18rpx rgba(217, 154, 43, 0.24);
+  transform: translateY(1rpx) scale(0.992);
+  opacity: 0.96;
+}
+
+/* "Continue" stays warm amber whether correct or wrong */
+.primary-btn-next {
+  background: linear-gradient(180deg, #E8B14C 0%, #DC9F30 55%, #C0851A 100%);
+  box-shadow:
+    inset 0 2rpx 0 rgba(255, 232, 184, 0.55),
+    inset 0 -2rpx 4rpx rgba(140, 86, 14, 0.20),
+    0 16rpx 36rpx rgba(217, 154, 43, 0.34),
+    0 6rpx 14rpx rgba(217, 154, 43, 0.20);
+}
+
+.primary-btn-next:active {
+  background: linear-gradient(180deg, #C7872A 0%, #A86B14 100%);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1rpx 0 rgba(140, 86, 14, 0.20),
+    0 8rpx 18rpx rgba(217, 154, 43, 0.24);
 }
 
 .replay-row {
@@ -589,8 +822,10 @@ page {
 
 .replay-text {
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.65);
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
   letter-spacing: 0.5rpx;
+  font-weight: 500;
 }
 
 .replay-row:active {
@@ -598,24 +833,33 @@ page {
 }
 
 .replay-row:active .replay-text {
-  color: rgba(255, 255, 255, 0.95);
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
 }
 
 .result {
   display: block;
   font-size: 26rpx;
-  color: #6EE7B7;
+  color: #4FAE78;
+  color: var(--correct, #4FAE78);
   text-align: center;
   letter-spacing: 0.5rpx;
 }
 
-/* ============ 答题结果：标题颜色 ============ */
+/* ============ 答题结果：标题升级（更大、更柔、不刺眼） ============ */
+.result-title-correct,
+.result-title-wrong {
+  font-size: 36rpx;
+  font-weight: 700;
+  letter-spacing: 0.5rpx;
+}
+
 .result-title-correct {
-  color: #34D399;
+  color: #5C9B7A;
 }
 
 .result-title-wrong {
-  color: #F87171;
+  color: #C97163;
 }
 
 /* ============ 答题结果反馈面板 ============ */
@@ -634,30 +878,58 @@ page {
 }
 
 .feedback-section-label {
-  font-size: 20rpx;
-  color: rgba(148, 163, 184, 0.75);
-  letter-spacing: 2rpx;
+  font-size: 22rpx;
+  color: #A99B8C;
+  color: var(--text-faint, #A99B8C);
+  letter-spacing: 1rpx;
   font-weight: 500;
 }
 
 .feedback-question-text {
   font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.78);
+  font-weight: 500;
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   line-height: 1.6;
   letter-spacing: 0.3rpx;
 }
 
-/* 正确答案卡片 */
+/* 正确答案卡片 — soft sage glass，柔和不刺眼 */
 .feedback-answer-card {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 16rpx;
   width: 100%;
   box-sizing: border-box;
-  padding: 20rpx 22rpx;
-  background: rgba(16, 185, 129, 0.10);
-  border: 1rpx solid rgba(52, 211, 153, 0.26);
-  border-radius: 16rpx;
+  padding: 22rpx 24rpx;
+  background:
+    radial-gradient(circle at 18% 0%,
+      rgba(255, 255, 255, 0.58) 0%,
+      rgba(255, 255, 255, 0) 50%),
+    rgba(227, 239, 230, 0.72);
+  border: 1rpx solid rgba(127, 165, 138, 0.32);
+  border-radius: 20rpx;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
+    0 8rpx 20rpx rgba(127, 165, 138, 0.14);
+  overflow: hidden;
+}
+
+.feedback-answer-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .feedback-answer-badge {
@@ -665,17 +937,25 @@ page {
   width: 44rpx;
   height: 44rpx;
   border-radius: 50%;
-  background: rgba(52, 211, 153, 0.20);
-  border: 1rpx solid rgba(52, 211, 153, 0.48);
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 60%),
+    rgba(127, 165, 138, 0.36);
+  border: 1rpx solid rgba(255, 255, 255, 0.62);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
+    0 2rpx 6rpx rgba(127, 165, 138, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 2rpx;
 }
 
 .feedback-answer-badge-text {
   font-size: 22rpx;
   font-weight: 700;
-  color: #34D399;
+  color: #5C9B7A;
   line-height: 1;
 }
 
@@ -683,42 +963,56 @@ page {
   flex: 1;
   min-width: 0;
   font-size: 28rpx;
-  color: #FFFFFF;
-  font-weight: 500;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
+  font-weight: 600;
   line-height: 1.5;
   word-break: break-word;
   padding-top: 6rpx;
 }
 
-/* 解释卡片 */
+/* 解释卡片 — 浅奶油磨砂玻璃，不发黄、不发灰 */
 .feedback-explanation-card {
-  padding: 18rpx 20rpx;
-  background: rgba(37, 99, 235, 0.08);
-  border: 1rpx solid rgba(96, 165, 250, 0.18);
-  border-radius: 14rpx;
+  position: relative;
+  padding: 22rpx 24rpx;
+  background:
+    radial-gradient(circle at 18% 0%,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 50%),
+    rgba(252, 245, 232, 0.72);
+  border: 1rpx solid rgba(255, 255, 255, 0.62);
+  border-radius: 20rpx;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
+    0 6rpx 18rpx rgba(88, 61, 32, 0.05);
+  overflow: hidden;
+}
+
+.feedback-explanation-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .feedback-explanation-text {
   font-size: 26rpx;
-  color: rgba(191, 219, 254, 0.85);
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   line-height: 1.65;
   letter-spacing: 0.3rpx;
 }
 
-/* 继续下一条按钮变体（答错时橙色） */
-.primary-btn-next {
-  background: #D97706;
-  box-shadow: 0 8rpx 24rpx rgba(217, 119, 6, 0.30);
-}
-
-.primary-btn-next:active {
-  background: #B45309;
-  box-shadow: 0 4rpx 12rpx rgba(217, 119, 6, 0.24);
-}
-
 /* ============ 关键帧 ============ */
-
-/* 视频切换 */
 @keyframes slideInFromBottom {
   from { opacity: 0; transform: translateY(18rpx); }
   to   { opacity: 1; transform: translateY(0); }
@@ -729,43 +1023,36 @@ page {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 暂停图标浮现 */
 @keyframes pauseEnter {
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.88); }
   to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-/* 字幕浮现 */
 @keyframes subtitleEnter {
   from { opacity: 0; transform: translateY(8rpx); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 面板打开 */
 @keyframes panelSlideUp {
   from { opacity: 0; transform: translateY(44%); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 面板关闭 */
 @keyframes panelSlideDown {
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(44%); }
 }
 
-/* 背景遮罩显示 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* 背景遮罩消失 */
 @keyframes fadeOut {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
 
-/* 答题结果反馈 */
 @keyframes resultFadeIn {
   from { opacity: 0; transform: translateY(12rpx); }
   to   { opacity: 1; transform: translateY(0); }

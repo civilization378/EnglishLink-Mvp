@@ -75,12 +75,14 @@
       <text class="bottom-title">{{currentVideo.title}}</text>
 
       <view wx:if="{{subtitleVisible}}" class="subtitle-overlay">
-        <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
-          <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
-            <text class="subtitle-line">{{item}}</text>
-          </block>
+        <view class="subtitle-glass">
+          <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
+            <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
+              <text class="subtitle-line">{{item}}</text>
+            </block>
+          </view>
+          <text wx:else class="subtitle-line">{{currentVideo.subtitle}}</text>
         </view>
-        <text wx:else class="subtitle-line">{{currentVideo.subtitle}}</text>
       </view>
     </view>
   </view>
@@ -115,11 +117,16 @@
   <view wx:if="{{showQuestionDrawer || questionDrawerClosing}}" class="panel-backdrop {{questionDrawerClosing ? 'backdrop-closing' : ''}}" bindtap="closeQuestionDrawer"></view>
   <view wx:if="{{showQuestionDrawer || questionDrawerClosing}}" class="panel question-panel {{questionDrawerClosing ? 'panel-closing' : ''}}">
     <view class="panel-handle"></view>
-    <view class="panel-header">
-      <text class="panel-title {{answerSubmitted ? (isCorrect ? 'result-title-correct' : 'result-title-wrong') : ''}}">
-        {{answerSubmitted ? answerFeedbackText : '理解题'}}
+    <view class="panel-header {{answerSubmitted ? 'panel-header-result' : ''}}">
+      <view class="panel-header-row">
+        <text class="panel-title {{answerSubmitted ? (isCorrect ? 'result-title-correct' : 'result-title-wrong') : ''}}">
+          {{answerSubmitted ? (isCorrect ? '✦ 答对了' : '差一点') : '理解题'}}
+        </text>
+        <text class="panel-tag">{{currentIndex + 1}} / {{totalVideos}}</text>
+      </view>
+      <text wx:if="{{answerSubmitted}}" class="panel-subtitle {{isCorrect ? 'panel-subtitle-correct' : 'panel-subtitle-wrong'}}">
+        {{isCorrect ? '你抓住了真实场景的关键。' : '这次差一点，看看真正的意思——'}}
       </text>
-      <text class="panel-tag">{{currentIndex + 1}} / {{totalVideos}}</text>
     </view>
 
     <!-- 答题阶段 -->
