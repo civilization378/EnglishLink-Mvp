@@ -1,356 +1,370 @@
+/* ============================================================
+ * Aurora Cinema · 极光影室 · Home
+ * Cinema-room navy. Electric-blue CTA. Mint reserved for progress.
+ * ============================================================ */
+
 page {
-  background: #020617;
+  background: #0A0F1F;
+  background: var(--bg-page, #0A0F1F);
 }
 
-/* ============ 根容器：可滚动卡片布局 ============ */
+/* ============ Root ============ */
 .index-page {
   min-height: 100vh;
-  background: #020617;
-  padding: calc(env(safe-area-inset-top) + 48rpx) 32rpx calc(env(safe-area-inset-bottom) + 56rpx);
+  background: #0A0F1F;
+  background: var(--bg-page, #0A0F1F);
+  padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 28rpx;
+  animation: pageFadeIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageFadeIn 300ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* ============ 顶部 Hero ============ */
+/* ============ Hero ============ */
 .hero {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding-bottom: 4rpx;
-  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 12rpx 4rpx 4rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) 40ms both;
+  animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 40ms both;
 }
 
-.hero-left {
-  display: flex;
-  flex-direction: column;
-  gap: 10rpx;
+.hero-eyebrow {
+  font-size: 22rpx;
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+  letter-spacing: 6rpx;
+  text-transform: uppercase;
 }
 
 .hero-title {
-  font-size: 44rpx;
+  font-size: 56rpx;
   font-weight: 700;
   color: #F8FAFC;
-  letter-spacing: 0.5rpx;
+  color: var(--text-strong, #F8FAFC);
+  letter-spacing: 1rpx;
+  line-height: 1.18;
 }
 
 .hero-subtitle {
-  font-size: 24rpx;
-  color: #94A3B8;
+  font-size: 26rpx;
+  color: #9CA8C0;
+  color: var(--text-mute, #9CA8C0);
+  line-height: 1.55;
   letter-spacing: 0.3rpx;
+  max-width: 560rpx;
 }
 
-.accuracy-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rpx;
-  padding: 12rpx 24rpx;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
-  border-radius: 999rpx;
-  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.accuracy-pill:active {
-  opacity: 0.68;
-}
-
-.accuracy-label {
-  font-size: 18rpx;
-  color: #94A3B8;
-  letter-spacing: 0.5rpx;
-}
-
-.accuracy-num {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #10B981;
-  letter-spacing: 0.3rpx;
-}
-
-/* ============ 今日推荐主卡片 ============ */
+/* ============ Today recommendation card ============ */
 .main-card {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
-  border-radius: 32rpx;
-  padding: 32rpx;
+  position: relative;
+  background: rgba(15, 23, 42, 0.55);
+  background: var(--bg-glass, rgba(15, 23, 42, 0.55));
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+  border: 1rpx solid var(--hairline, rgba(255, 255, 255, 0.06));
+  border-radius: 28rpx;
+  border-radius: var(--radius-card, 28rpx);
+  padding: 32rpx 32rpx 30rpx;
   display: flex;
   flex-direction: column;
   gap: 20rpx;
-  animation: fadeSlideUp 360ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+  overflow: hidden;
+  animation: fadeSlideUp 360ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
+  animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 100ms both;
+}
+
+/* Quiet ambient glow at the corner — never loud */
+.main-card-glow {
+  position: absolute;
+  top: -160rpx;
+  right: -120rpx;
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 124, 255, 0.16) 0%, transparent 65%);
+  pointer-events: none;
 }
 
 .main-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 1;
 }
 
-.section-label {
+.scene-chip {
   font-size: 22rpx;
-  color: #94A3B8;
-  letter-spacing: 2rpx;
-  font-weight: 500;
+  font-weight: 600;
+  color: #9CA8C0;
+  color: var(--text-mute, #9CA8C0);
+  letter-spacing: 4rpx;
+  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+  border-radius: var(--radius-pill, 999rpx);
+  background: rgba(79, 124, 255, 0.10);
+  border: 1rpx solid rgba(79, 124, 255, 0.22);
 }
 
 .progress-badge {
   font-size: 22rpx;
-  color: #94A3B8;
-  padding: 4rpx 18rpx;
-  background: rgba(148, 163, 184, 0.08);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+  letter-spacing: 1rpx;
+  padding: 4rpx 16rpx;
   border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+  border: 1rpx solid var(--hairline, rgba(255, 255, 255, 0.06));
+}
+
+.progress-badge--done {
+  color: #5EEAD4;
+  color: var(--aurora-mint, #5EEAD4);
+  background: rgba(94, 234, 212, 0.08);
+  border-color: rgba(94, 234, 212, 0.28);
 }
 
 .main-card-title {
-  font-size: 36rpx;
-  font-weight: 600;
+  font-size: 40rpx;
+  font-weight: 700;
   color: #F8FAFC;
-  line-height: 1.4;
+  color: var(--text-strong, #F8FAFC);
+  line-height: 1.32;
   letter-spacing: 0.3rpx;
-}
-
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-}
-
-.tag {
-  display: inline-block;
-  padding: 6rpx 18rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  font-weight: 500;
-  letter-spacing: 0.5rpx;
-}
-
-.scene-tag {
-  background: rgba(37, 99, 235, 0.20);
-  color: #BFDBFE;
-  border: 1rpx solid rgba(96, 165, 250, 0.38);
-}
-
-.level-tag {
-  background: rgba(16, 185, 129, 0.16);
-  color: #A7F3D0;
-  border: 1rpx solid rgba(52, 211, 153, 0.40);
-}
-
-.done-tag {
-  background: rgba(16, 185, 129, 0.20);
-  color: #A7F3D0;
-  border: 1rpx solid rgba(52, 211, 153, 0.42);
-}
-
-/* 封面区域 */
-.cover-area {
-  height: 280rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(145deg, #0e1e45 0%, #060c1c 60%, #020917 100%);
-  border: 1rpx solid rgba(96, 165, 250, 0.16);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 12rpx 40rpx rgba(0, 0, 0, 0.50),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.04);
-  transition:
-    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.cover-area:active {
-  opacity: 0.86;
-  transform: scale(0.99);
-}
-
-.cover-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -150rpx;
-  margin-left: -150rpx;
-  width: 300rpx;
-  height: 300rpx;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.play-ring {
-  width: 110rpx;
-  height: 110rpx;
-  border-radius: 50%;
-  background: rgba(37, 99, 235, 0.22);
-  border: 2rpx solid rgba(96, 165, 250, 0.58);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 40rpx rgba(37, 99, 235, 0.32);
   z-index: 1;
 }
 
-.play-icon {
-  font-size: 44rpx;
-  color: #BFDBFE;
-  margin-left: 8rpx;
-  line-height: 1;
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12rpx;
+  position: relative;
+  z-index: 1;
 }
 
-/* 开始按钮 */
-.start-btn {
-  height: 88rpx;
-  background: #2563EB;
-  border-radius: 24rpx;
+.meta-text {
+  font-size: 24rpx;
+  color: #9CA8C0;
+  color: var(--text-mute, #9CA8C0);
+  letter-spacing: 0.3rpx;
+}
+
+.meta-dot {
+  font-size: 24rpx;
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+}
+
+.hook-text {
+  font-size: 24rpx;
+  color: #9CA8C0;
+  color: var(--text-mute, #9CA8C0);
+  line-height: 1.55;
+  letter-spacing: 0.2rpx;
+  padding: 10rpx 0 4rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============ Primary CTA ============ */
+.primary-btn {
+  margin-top: 8rpx;
+  height: 96rpx;
+  background: #4F7CFF;
+  background: var(--primary, #4F7CFF);
+  border-radius: 20rpx;
+  border-radius: var(--radius-btn, 20rpx);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.32);
+  box-shadow: 0 12rpx 32rpx rgba(79, 124, 255, 0.32);
+  box-shadow: var(--shadow-cta, 0 12rpx 32rpx rgba(79, 124, 255, 0.32));
   transition:
     background 140ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 1;
 }
 
-.start-btn:active {
-  background: #1D4ED8;
-  box-shadow: 0 4rpx 12rpx rgba(37, 99, 235, 0.24);
-  transform: scale(0.98);
-  opacity: 0.92;
+.primary-btn--press {
+  background: #3B63D9;
+  background: var(--primary-press, #3B63D9);
+  box-shadow: 0 6rpx 16rpx rgba(79, 124, 255, 0.24);
+  transform: translateY(1rpx) scale(0.985);
+  opacity: 0.96;
 }
 
-.start-btn-text {
+.primary-btn-text {
   font-size: 30rpx;
   font-weight: 600;
   color: #FFFFFF;
-  letter-spacing: 1rpx;
+  letter-spacing: 1.2rpx;
 }
 
-/* ============ 学习统计卡片 ============ */
+/* ============ Stats ============ */
 .stats-row {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
-  border-radius: 28rpx;
   display: flex;
-  align-items: center;
-  padding: 30rpx 0;
-  animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  gap: 16rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+  animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 180ms both;
 }
 
 .stat-card {
   flex: 1;
+  background: #131A2E;
+  background: var(--bg-surface-1, #131A2E);
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+  border: 1rpx solid var(--hairline, rgba(255, 255, 255, 0.06));
+  border-radius: 24rpx;
+  padding: 28rpx 16rpx 24rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8rpx;
 }
 
-.stat-divider {
-  width: 1rpx;
-  height: 56rpx;
-  background: rgba(148, 163, 184, 0.14);
-  flex-shrink: 0;
+.stat-card:nth-child(2) {
+  animation: fadeIn 280ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+  animation: fadeIn 280ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 240ms both;
+}
+
+.stat-card:nth-child(3) {
+  animation: fadeIn 280ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
+  animation: fadeIn 280ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 300ms both;
 }
 
 .stat-num {
-  font-size: 42rpx;
+  font-size: 44rpx;
   font-weight: 700;
   color: #F8FAFC;
+  color: var(--text-strong, #F8FAFC);
   letter-spacing: 0.3rpx;
-  line-height: 1.2;
+  line-height: 1.18;
+}
+
+/* Mint only when learner is doing well — small, never decorative */
+.stat-num--mint {
+  color: #5EEAD4;
+  color: var(--aurora-mint, #5EEAD4);
 }
 
 .stat-label {
   font-size: 22rpx;
-  color: #94A3B8;
-  letter-spacing: 0.5rpx;
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+  letter-spacing: 1rpx;
 }
 
-/* ============ 今日目标卡片 ============ */
-.goal-card {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
+/* ============ Path card ============ */
+.path-card {
+  background: rgba(15, 23, 42, 0.55);
+  background: var(--bg-glass, rgba(15, 23, 42, 0.55));
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+  border: 1rpx solid var(--hairline, rgba(255, 255, 255, 0.06));
   border-radius: 28rpx;
-  padding: 30rpx 32rpx;
+  border-radius: var(--radius-card, 28rpx);
+  padding: 30rpx 32rpx 28rpx;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
-  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) 170ms both;
+  gap: 22rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+  animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 240ms both;
 }
 
-.goal-title {
-  font-size: 26rpx;
+.path-title {
+  font-size: 22rpx;
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
   font-weight: 600;
-  color: #F8FAFC;
-  letter-spacing: 0.5rpx;
 }
 
-.goal-list {
+.path-list {
   display: flex;
   flex-direction: column;
   gap: 18rpx;
 }
 
-.goal-item {
+.path-item {
   display: flex;
   align-items: center;
-  gap: 18rpx;
+  gap: 22rpx;
 }
 
-.goal-dot {
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: #2563EB;
+.path-num {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #4F7CFF;
+  color: var(--primary, #4F7CFF);
+  letter-spacing: 1rpx;
+  width: 44rpx;
   flex-shrink: 0;
+  font-feature-settings: "tnum";
 }
 
-.goal-text {
+.path-text {
   font-size: 26rpx;
-  color: #94A3B8;
+  color: #9CA8C0;
+  color: var(--text-mute, #9CA8C0);
   line-height: 1.5;
+  letter-spacing: 0.2rpx;
 }
 
-/* ============ 底部弱按钮 ============ */
-.bottom-action {
+/* ============ Profile link (de-emphasized) ============ */
+.profile-link {
+  margin: 4rpx auto 0;
+  padding: 18rpx 36rpx;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding-top: 4rpx;
-  animation: fadeSlideUp 280ms cubic-bezier(0.22, 1, 0.36, 1) 210ms both;
-}
-
-.ghost-btn {
-  padding: 18rpx 56rpx;
-  border: 1rpx solid rgba(148, 163, 184, 0.22);
   border-radius: 999rpx;
-  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1), background 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: var(--radius-pill, 999rpx);
+  transition:
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: fadeIn 280ms cubic-bezier(0.22, 1, 0.36, 1) 320ms both;
+  animation: fadeIn 280ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 320ms both;
 }
 
-.ghost-btn:active {
+.profile-link--press {
   opacity: 0.62;
-  background: rgba(148, 163, 184, 0.06);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.ghost-btn-text {
-  font-size: 26rpx;
-  color: #94A3B8;
-  letter-spacing: 0.5rpx;
+.profile-link-text {
+  font-size: 24rpx;
+  color: #5B6884;
+  color: var(--text-faint, #5B6884);
+  letter-spacing: 1rpx;
 }
 
-/* ============ 关键帧 ============ */
+/* ============ Keyframes ============ */
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20rpx);
+    transform: translateY(16rpx);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

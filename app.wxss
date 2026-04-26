@@ -1,6 +1,51 @@
+/* ============================================================
+ * Aurora Cinema · 极光影室 · Global Design Tokens
+ * 99% calm immersion, 1% aurora — used only on progress / correct.
+ * Tokens are exposed on `page` so they cascade to every wxss file.
+ * Hex fallbacks are provided alongside var() in critical declarations.
+ * ============================================================ */
 page {
-  background: #F5F7FB;
-  color: #111827;
+  /* Surfaces */
+  --bg-page: #0A0F1F;
+  --bg-surface-1: #131A2E;
+  --bg-surface-2: #1B2440;
+  --bg-glass: rgba(15, 23, 42, 0.55);
+  --hairline: rgba(255, 255, 255, 0.06);
+
+  /* Brand & accent */
+  --primary: #4F7CFF;
+  --primary-press: #3B63D9;
+  --aurora-mint: #5EEAD4;
+  --sunrise-gold: #FBBF24;
+
+  /* Semantic */
+  --correct: #22D3A0;
+  --wrong: #F87171;
+
+  /* Text */
+  --text-strong: #F8FAFC;
+  --text-mute: #9CA8C0;
+  --text-faint: #5B6884;
+
+  /* Shadows */
+  --shadow-cta: 0 12rpx 32rpx rgba(79, 124, 255, 0.32);
+  --shadow-glow-mint: 0 0 32rpx rgba(94, 234, 212, 0.45);
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 0.6);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0.24, 1);
+
+  /* Radii */
+  --radius-card: 28rpx;
+  --radius-btn: 20rpx;
+  --radius-pill: 999rpx;
+
+  /* Page defaults */
+  background: #0A0F1F;
+  background: var(--bg-page);
+  color: #F8FAFC;
+  color: var(--text-strong);
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;
   line-height: 1.55;

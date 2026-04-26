@@ -1,50 +1,53 @@
 <view class="index-page">
 
-  <!-- 顶部 Hero -->
+  <!-- Hero -->
   <view class="hero">
-    <view class="hero-left">
-      <text class="hero-title">English Link</text>
-      <text class="hero-subtitle">看真实场景，直接理解英文</text>
-    </view>
-    <view class="accuracy-pill" bindtap="goMy">
-      <text class="accuracy-label">正确率</text>
-      <text class="accuracy-num">{{total > 0 ? accuracy + '%' : '--'}}</text>
-    </view>
+    <text class="hero-eyebrow">English Link</text>
+    <text class="hero-title">看场景 · 懂英文</text>
+    <text class="hero-subtitle">不用翻译，每天 1 段真实视频，把英文练成本能</text>
   </view>
 
   <!-- 今日推荐主卡片 -->
   <view class="main-card">
+    <view class="main-card-glow"></view>
+
     <view class="main-card-header">
-      <text class="section-label">今日推荐</text>
-      <text class="progress-badge">第 {{recommendNumber}} / {{totalVideos}} 条</text>
+      <text class="scene-chip">今日场景</text>
+      <text wx:if="{{!completedAll}}" class="progress-badge">{{recommendNumber}} / {{totalVideos}}</text>
+      <text wx:else class="progress-badge progress-badge--done">已通关</text>
     </view>
 
     <block wx:if="{{!completedAll}}">
       <text class="main-card-title">{{todayVideo.title}}</text>
-      <view class="tag-row">
-        <text class="tag scene-tag">{{todayVideo.sceneName}}</text>
-        <text class="tag level-tag">{{todayVideo.level}}</text>
+
+      <view class="meta-row">
+        <text class="meta-text">真实场景视频</text>
+        <text class="meta-dot">·</text>
+        <text class="meta-text">1 道理解题</text>
+        <text wx:if="{{todayVideo.level}}" class="meta-dot">·</text>
+        <text wx:if="{{todayVideo.level}}" class="meta-text">{{todayVideo.level}}</text>
+      </view>
+
+      <text class="hook-text">今天用一个真实片段，测试你是否真的听懂。</text>
+
+      <view class="primary-btn" bindtap="goStudy" hover-class="primary-btn--press" hover-stay-time="80">
+        <text class="primary-btn-text">▶ 开始今日 1 分钟</text>
       </view>
     </block>
+
     <block wx:else>
-      <text class="main-card-title">本轮学习已完成</text>
-      <view class="tag-row">
-        <text class="tag done-tag">全部完成</text>
+      <text class="main-card-title">本轮训练已完成</text>
+
+      <view class="meta-row">
+        <text class="meta-text">{{totalVideos}} 段场景已通关</text>
+      </view>
+
+      <text class="hook-text">把熟悉的场景再训练一遍，让英文成为本能。</text>
+
+      <view class="primary-btn" bindtap="goStudy" hover-class="primary-btn--press" hover-stay-time="80">
+        <text class="primary-btn-text">重新开始训练</text>
       </view>
     </block>
-
-    <!-- 封面区域 -->
-    <view class="cover-area" bindtap="goStudy">
-      <view class="cover-glow"></view>
-      <view class="play-ring">
-        <text class="play-icon">▶</text>
-      </view>
-    </view>
-
-    <!-- 开始按钮 -->
-    <view class="start-btn" bindtap="goStudy">
-      <text class="start-btn-text">{{completedAll ? '重新开始学习' : '开始推荐学习'}}</text>
-    </view>
   </view>
 
   <!-- 学习统计卡片 -->
@@ -53,42 +56,38 @@
       <text class="stat-num">{{total}}</text>
       <text class="stat-label">已学习</text>
     </view>
-    <view class="stat-divider"></view>
     <view class="stat-card">
       <text class="stat-num">{{correct}}</text>
       <text class="stat-label">答对</text>
     </view>
-    <view class="stat-divider"></view>
     <view class="stat-card">
-      <text class="stat-num">{{total > 0 ? accuracy + '%' : '--'}}</text>
+      <text class="stat-num {{total > 0 && accuracy >= 80 ? 'stat-num--mint' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
       <text class="stat-label">正确率</text>
     </view>
   </view>
 
-  <!-- 今日目标卡片 -->
-  <view class="goal-card">
-    <text class="goal-title">今日目标</text>
-    <view class="goal-list">
-      <view class="goal-item">
-        <view class="goal-dot"></view>
-        <text class="goal-text">看一段真实场景视频</text>
+  <!-- 今日训练路径 -->
+  <view class="path-card">
+    <text class="path-title">今日训练路径</text>
+    <view class="path-list">
+      <view class="path-item">
+        <text class="path-num">01</text>
+        <text class="path-text">看一段真实英文场景</text>
       </view>
-      <view class="goal-item">
-        <view class="goal-dot"></view>
-        <text class="goal-text">理解关键英文表达</text>
+      <view class="path-item">
+        <text class="path-num">02</text>
+        <text class="path-text">回答一道理解题</text>
       </view>
-      <view class="goal-item">
-        <view class="goal-dot"></view>
-        <text class="goal-text">完成一道理解题</text>
+      <view class="path-item">
+        <text class="path-num">03</text>
+        <text class="path-text">看解释，确认自己听懂了什么</text>
       </view>
     </view>
   </view>
 
-  <!-- 底部弱按钮 -->
-  <view class="bottom-action">
-    <view class="ghost-btn" bindtap="goMy">
-      <text class="ghost-btn-text">查看我的学习</text>
-    </view>
+  <!-- 弱化的我的入口 -->
+  <view class="profile-link" bindtap="goMy" hover-class="profile-link--press" hover-stay-time="60">
+    <text class="profile-link-text">查看我的学习档案 →</text>
   </view>
 
 </view>
