@@ -10,11 +10,11 @@
 
   <view class="video-card">
     <video
-      class="video-player"
+      class="video-player {{currentVideo.videoOrientation === 'portrait' ? 'video-player-portrait' : 'video-player-landscape'}}"
       src="{{currentVideo.videoUrl}}"
       controls
       autoplay="{{false}}"
-      object-fit="cover"
+      object-fit="contain"
     ></video>
   </view>
 

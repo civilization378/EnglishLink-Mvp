@@ -46,39 +46,43 @@ The speaker says: I'd like a tall white chocolate mocha.
 ## 内容 2：机场出行
 
 标题：
-At the Airport
+Checking in at the Airport
 
 场景：
-出行场景 / 机场
+机场值机
 
 难度：
-A1
+A2
 
 视频链接：
-暂时为空
+http://127.0.0.1:8080/airport-01.mp4
 
 英文字幕：
-Where is the boarding gate?
+Do you have any check-in luggage? No, just one carry-on bag. Okay, here's your boarding pass. Your boarding time is at 2:15 p.m. And your gate number is T27.
 
 词汇释义：
-- boarding: getting on a plane
-  - 中文提示：登机
-- gate: the place where passengers board
-  - 中文提示：登机口
+- check-in luggage: bags that are stored under the plane
+  - 中文提示：托运行李
+- carry-on bag: a small bag you take onto the plane
+  - 中文提示：随身行李
+- boarding pass: a document that lets you get on the plane
+  - 中文提示：登机牌
+- gate number: the place number where you board the plane
+  - 中文提示：登机口号码
 
 理解题：
-Where is the speaker probably?
+What is the gate number?
 
 选项：
-A. At school
-B. At the airport
-C. At home
+A. T17
+B. T27
+C. T15
 
 正确答案：
 B
 
 解释：
-"Boarding gate" is usually used at the airport.
+The staff says: Your gate number is T27.
 
 ---
 

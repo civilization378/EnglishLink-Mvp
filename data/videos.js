@@ -7,6 +7,7 @@ const videos = [
     scene: "daily",
     sceneName: "点餐场景",
     level: "A2",
+    videoOrientation: "landscape",
     videoUrl: "http://127.0.0.1:8080/coffee-01.mp4",
     subtitle: "I'd like a tall white chocolate mocha. Hot, please. And then may I have the banana nut bread? Yes, warmed up, please. Thank you.",
     subtitleLines: [
@@ -46,29 +47,47 @@ const videos = [
   },
   {
     id: 2,
-    title: "At the Airport",
+    title: "Checking in at the Airport",
     scene: "travel",
-    sceneName: "出行场景",
-    level: "A1",
-    videoUrl: testVideoUrl,
-    subtitle: "Where is the boarding gate?",
+    sceneName: "机场值机",
+    level: "A2",
+    videoOrientation: "portrait",
+    videoUrl: "http://127.0.0.1:8080/airport-01.mp4",
+    subtitle: "Do you have any check-in luggage? No, just one carry-on bag. Okay, here's your boarding pass. Your boarding time is at 2:15 p.m. And your gate number is T27.",
+    subtitleLines: [
+      "Do you have any check-in luggage?",
+      "No, just one carry-on bag.",
+      "Okay, here's your boarding pass.",
+      "Your boarding time is at 2:15 p.m.",
+      "And your gate number is T27."
+    ],
     glossary: [
       {
-        word: "boarding",
-        meaning: "getting on a plane",
-        chineseHint: "登机"
+        word: "check-in luggage",
+        meaning: "bags that are stored under the plane",
+        chineseHint: "托运行李"
       },
       {
-        word: "gate",
-        meaning: "the place where passengers board",
-        chineseHint: "登机口"
+        word: "carry-on bag",
+        meaning: "a small bag you take onto the plane",
+        chineseHint: "随身行李"
+      },
+      {
+        word: "boarding pass",
+        meaning: "a document that lets you get on the plane",
+        chineseHint: "登机牌"
+      },
+      {
+        word: "gate number",
+        meaning: "the place number where you board the plane",
+        chineseHint: "登机口号码"
       }
     ],
     question: {
-      text: "Where is the speaker probably?",
-      options: ["At school", "At the airport", "At home"],
+      text: "What is the gate number?",
+      options: ["T17", "T27", "T15"],
       answerIndex: 1,
-      explanation: "The words 'boarding gate' usually appear at the airport."
+      explanation: "The staff says: Your gate number is T27."
     }
   },
   {
@@ -77,6 +96,7 @@ const videos = [
     scene: "social",
     sceneName: "社交场景",
     level: "A1",
+    videoOrientation: "landscape",
     videoUrl: testVideoUrl,
     subtitle: "Long time no see!",
     glossary: [
@@ -108,6 +128,7 @@ const videos = [
     scene: "shopping",
     sceneName: "购物场景",
     level: "A1",
+    videoOrientation: "landscape",
     videoUrl: testVideoUrl,
     subtitle: "Can I pay by card?",
     glossary: [
@@ -135,6 +156,7 @@ const videos = [
     scene: "daily",
     sceneName: "日常交流",
     level: "A1",
+    videoOrientation: "landscape",
     videoUrl: testVideoUrl,
     subtitle: "How can I get to the station?",
     glossary: [
