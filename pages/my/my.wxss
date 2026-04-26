@@ -1,72 +1,304 @@
-.container {
-  padding: 30rpx;
+page {
+  background: #020617;
+}
+
+/* ============ 根容器 ============ */
+.my-page {
+  min-height: 100vh;
+  background: #020617;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 56rpx);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 24rpx;
 }
 
-.card {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 24rpx;
+/* ============ 顶部栏 ============ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(env(safe-area-inset-top) + 20rpx) 28rpx 16rpx;
 }
 
-.card-title {
-  font-size: 30rpx;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 16rpx;
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.70);
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.stat {
-  display: block;
-  font-size: 28rpx;
-  color: #444;
-  margin-bottom: 10rpx;
+.back-btn:active {
+  opacity: 0.65;
+}
+
+.back-icon {
+  font-size: 44rpx;
+  color: #FFFFFF;
+  line-height: 1;
+  margin-top: -4rpx;
+  font-weight: 300;
+}
+
+.top-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #F8FAFC;
+  letter-spacing: 0.5rpx;
+}
+
+.top-placeholder {
+  width: 64rpx;
+}
+
+/* ============ Hero 档案卡片 ============ */
+.hero-card {
+  margin: 0 32rpx;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.hero-card-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: 0.3rpx;
+  flex: 1;
+}
+
+.level-badge {
+  flex-shrink: 0;
+  padding: 6rpx 18rpx;
+  background: rgba(37, 99, 235, 0.20);
+  border: 1rpx solid rgba(96, 165, 250, 0.38);
+  border-radius: 999rpx;
+}
+
+.level-badge-text {
+  font-size: 20rpx;
+  color: #BFDBFE;
+  font-weight: 500;
+  letter-spacing: 0.5rpx;
+}
+
+.hero-card-subtitle {
+  font-size: 24rpx;
+  color: #94A3B8;
+  line-height: 1.55;
+  letter-spacing: 0.3rpx;
+}
+
+/* ============ 学习统计 ============ */
+.stats-row {
+  margin: 0 32rpx;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+}
+
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 56rpx;
+  background: rgba(148, 163, 184, 0.14);
+  flex-shrink: 0;
+}
+
+.stat-num {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: 0.3rpx;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #94A3B8;
+  letter-spacing: 0.5rpx;
+}
+
+/* ============ 历史记录卡片 ============ */
+.history-card {
+  margin: 0 32rpx;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  border-radius: 28rpx;
+  padding: 30rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
+}
+
+.card-section-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #F8FAFC;
+  letter-spacing: 0.5rpx;
+}
+
+/* 历史记录列表 */
+.history-list {
+  display: flex;
+  flex-direction: column;
 }
 
 .record-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
 }
 
-.record-item:last-child {
-  border-bottom: none;
+.record-item-sep {
+  border-bottom: 1rpx solid rgba(148, 163, 184, 0.10);
+}
+
+.record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
 }
 
 .record-title {
-  display: block;
-  font-size: 30rpx;
-  font-weight: bold;
-  color: #222;
-  margin-bottom: 8rpx;
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #F8FAFC;
+  line-height: 1.45;
+  letter-spacing: 0.3rpx;
+}
+
+.result-badge {
+  flex-shrink: 0;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+}
+
+.badge-correct {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1rpx solid rgba(52, 211, 153, 0.40);
+}
+
+.badge-wrong {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1rpx solid rgba(248, 113, 113, 0.32);
+}
+
+.result-badge-text {
+  font-size: 20rpx;
+  font-weight: 500;
+  letter-spacing: 0.3rpx;
+}
+
+.badge-correct .result-badge-text {
+  color: #34D399;
+}
+
+.badge-wrong .result-badge-text {
+  color: #F87171;
 }
 
 .record-question {
-  display: block;
-  font-size: 26rpx;
-  color: #555;
-  margin-bottom: 8rpx;
-}
-
-.record-result {
-  display: block;
-  font-size: 26rpx;
-  color: #2c7;
-  margin-bottom: 8rpx;
+  font-size: 24rpx;
+  color: #94A3B8;
+  line-height: 1.55;
+  letter-spacing: 0.2rpx;
 }
 
 .record-time {
-  display: block;
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: rgba(148, 163, 184, 0.55);
+  letter-spacing: 0.2rpx;
 }
 
-.empty {
-  color: #999;
-  font-size: 26rpx;
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 16rpx 0 8rpx;
 }
+
+.empty-title {
+  font-size: 28rpx;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: rgba(148, 163, 184, 0.60);
+  line-height: 1.6;
+  letter-spacing: 0.2rpx;
+}
+
+/* 清空按钮 */
+.clear-row {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 4rpx;
+}
+
 .clear-btn {
-  margin-top: 20rpx;
-  color: #e64340;
+  padding: 14rpx 28rpx;
+  border: 1rpx solid rgba(239, 68, 68, 0.35);
+  border-radius: 999rpx;
+  background: rgba(239, 68, 68, 0.06);
+  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1), background 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.clear-btn:active {
+  opacity: 0.70;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.clear-btn-text {
+  font-size: 24rpx;
+  color: rgba(239, 68, 68, 0.80);
+  letter-spacing: 0.5rpx;
+  font-weight: 500;
+}
+
+/* ============ 关键帧 ============ */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

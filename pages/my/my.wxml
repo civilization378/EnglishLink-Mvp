@@ -1,30 +1,79 @@
-<view class="container">
-  <view class="card">
-    <text class="card-title">我的学习统计</text>
-    <text class="stat">已学习次数：{{total}}</text>
-    <text class="stat">答对次数：{{correct}}</text>
+<view class="my-page">
+
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="top-title">我的学习</text>
+    <view class="top-placeholder"></view>
   </view>
 
-  <view class="card">
-    <text class="card-title">最近学习记录</text>
+  <!-- Hero 档案卡片 -->
+  <view class="hero-card">
+    <view class="hero-card-top">
+      <text class="hero-card-title">English Link 学习档案</text>
+      <view class="level-badge">
+        <text class="level-badge-text">A2 场景学习中</text>
+      </view>
+    </view>
+    <text class="hero-card-subtitle">记录你的真实场景英文理解进度</text>
+  </view>
 
+  <!-- 学习统计卡片 -->
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-num">{{total}}</text>
+      <text class="stat-label">已学习</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-card">
+      <text class="stat-num">{{correct}}</text>
+      <text class="stat-label">答对</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-card">
+      <text class="stat-num">{{total > 0 ? accuracy + '%' : '--'}}</text>
+      <text class="stat-label">正确率</text>
+    </view>
+  </view>
+
+  <!-- 最近学习记录 -->
+  <view class="history-card">
+    <text class="card-section-title">最近学习记录</text>
+
+    <!-- 有记录 -->
     <block wx:if="{{history.length > 0}}">
-      <block wx:for="{{history}}" wx:key="index">
-        <view class="record-item">
-          <text class="record-title">{{item.title}}</text>
-          <text class="record-question">{{item.question}}</text>
-          <text class="record-result">
-            结果：{{item.isCorrect ? '回答正确' : '回答错误'}}
-          </text>
-          <text class="record-time">时间：{{item.time}}</text>
+      <view class="history-list">
+        <block wx:for="{{history}}" wx:key="index">
+          <view class="record-item {{index < history.length - 1 ? 'record-item-sep' : ''}}">
+            <view class="record-header">
+              <text class="record-title">{{item.title}}</text>
+              <view class="result-badge {{item.isCorrect ? 'badge-correct' : 'badge-wrong'}}">
+                <text class="result-badge-text">{{item.isCorrect ? '正确' : '错误'}}</text>
+              </view>
+            </view>
+            <text wx:if="{{item.question && item.question.text}}" class="record-question">{{item.question.text}}</text>
+            <text class="record-time">{{item.time}}</text>
+          </view>
+        </block>
+      </view>
+
+      <!-- 清空按钮 -->
+      <view class="clear-row">
+        <view class="clear-btn" bindtap="clearStudyData">
+          <text class="clear-btn-text">清空学习记录</text>
         </view>
-      </block>
+      </view>
     </block>
 
+    <!-- 空状态 -->
     <block wx:else>
-      <text class="empty">还没有学习记录</text>
+      <view class="empty-state">
+        <text class="empty-title">还没有学习记录</text>
+        <text class="empty-desc">开始完成一次真实场景训练后，这里会自动记录</text>
+      </view>
     </block>
   </view>
 
-  <button class="clear-btn" bindtap="clearStudyData">清空学习记录</button>
 </view>

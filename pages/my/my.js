@@ -2,6 +2,7 @@ Page({
   data: {
     total: 0,
     correct: 0,
+    accuracy: 0,
     history: []
   },
 
@@ -10,17 +11,26 @@ Page({
   },
 
   loadStudyData() {
-    const stats = wx.getStorageSync('studyStats') || {
-      total: 0,
-      correct: 0
-    }
-
+    const stats = wx.getStorageSync('studyStats') || { total: 0, correct: 0 }
     const history = wx.getStorageSync('studyHistory') || []
+    const accuracy = stats.total > 0
+      ? Math.round((stats.correct / stats.total) * 100)
+      : 0
 
     this.setData({
       total: stats.total,
       correct: stats.correct,
-      history: history
+      accuracy,
+      history
+    })
+  },
+
+  goBack() {
+    wx.navigateBack({
+      delta: 1,
+      fail: () => {
+        wx.redirectTo({ url: '/pages/index/index' })
+      }
     })
   },
 
@@ -29,7 +39,7 @@ Page({
       title: '确认清空？',
       content: '清空后，学习次数、答对次数和历史记录都会被删除。',
       confirmText: '清空',
-      confirmColor: '#e64340',
+      confirmColor: '#ef4444',
       cancelText: '取消',
       success: (res) => {
         if (res.confirm) {
@@ -37,16 +47,9 @@ Page({
           wx.removeStorageSync('studyHistory')
           wx.removeStorageSync('studyProgress')
 
-          this.setData({
-            total: 0,
-            correct: 0,
-            history: []
-          })
+          this.setData({ total: 0, correct: 0, accuracy: 0, history: [] })
 
-          wx.showToast({
-            title: '已清空',
-            icon: 'success'
-          })
+          wx.showToast({ title: '已清空', icon: 'success' })
         }
       }
     })
