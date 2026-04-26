@@ -1,77 +1,139 @@
-<view class="container">
-  <view class="header">
-    <text class="title">{{currentVideo.title}}</text>
+<view class="study-page">
+  <!-- 视频层（占满整屏，object-fit: contain 自然处理横/竖屏） -->
+  <video
+    id="mainVideo"
+    class="video-player {{currentVideo.videoOrientation === 'portrait' ? 'video-player-portrait' : 'video-player-landscape'}}"
+    src="{{currentVideo.videoUrl}}"
+    controls="{{false}}"
+    show-progress="{{false}}"
+    show-play-btn="{{false}}"
+    show-center-play-btn="{{false}}"
+    show-fullscreen-btn="{{false}}"
+    autoplay="{{true}}"
+    object-fit="contain"
+    bindended="onVideoEnded"
+  ></video>
 
-    <view class="tag-row">
-      <text class="tag">{{currentVideo.sceneName}}</text>
-      <text class="tag level-tag">{{currentVideo.level}}</text>
+  <!-- 视频点击区域（暂停/播放） -->
+  <view class="video-tap-area" bindtap="toggleVideoPlay">
+    <view wx:if="{{!isPlaying}}" class="pause-indicator">
+      <text class="pause-icon">▶</text>
     </view>
   </view>
 
-  <view class="video-card">
-    <video
-      id="mainVideo"
-      class="video-player {{currentVideo.videoOrientation === 'portrait' ? 'video-player-portrait' : 'video-player-landscape'}}"
-      src="{{currentVideo.videoUrl}}"
-      controls
-      autoplay="{{true}}"
-      object-fit="contain"
-      bindended="onVideoEnded"
-    ></video>
+  <!-- 顶部 + 底部柔和渐变蒙层，提升字幕和按钮可读性 -->
+  <view class="video-mask"></view>
+
+  <!-- 顶部浮层：返回 + 进度 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="progress-pill">
+      <text class="progress-text">{{currentIndex + 1}} / {{totalVideos}}</text>
+    </view>
   </view>
 
-  <view wx:if="{{!showQuestion}}" class="video-hint">
-    <text class="video-hint-text">先观看视频，结束后开始答题</text>
+  <!-- 右侧悬浮学习按钮栏：抽屉关闭时可见 -->
+  <view wx:if="{{!showQuestionDrawer && !glossaryVisible}}" class="action-bar">
+    <view class="action-item {{subtitleVisible ? 'is-active' : ''}}" bindtap="toggleSubtitle">
+      <view class="action-circle">
+        <text class="action-glyph">字</text>
+      </view>
+      <text class="action-caption">字幕</text>
+    </view>
+
+    <view class="action-item {{glossaryVisible ? 'is-active' : ''}}" bindtap="openGlossary">
+      <view class="action-circle">
+        <text class="action-glyph">词</text>
+      </view>
+      <text class="action-caption">词汇</text>
+    </view>
+
+    <view class="action-item action-item-cta" bindtap="openQuestionDrawer">
+      <view class="action-circle action-circle-cta">
+        <text class="action-glyph">?</text>
+      </view>
+      <text class="action-caption">答题</text>
+    </view>
   </view>
 
-  <view wx:if="{{showQuestion}}" class="question-stage fade-in">
-    <view class="section subtitle-card">
-      <text class="section-title">字幕</text>
+  <!-- 底部信息浮层：抽屉关闭时显示 -->
+  <view wx:if="{{!showQuestionDrawer}}" class="bottom-info">
+    <view class="meta-row">
+      <text class="tag scene-tag">{{currentVideo.sceneName}}</text>
+      <text class="tag level-tag">{{currentVideo.level}}</text>
+    </view>
+    <text class="bottom-title">{{currentVideo.title}}</text>
+
+    <view wx:if="{{subtitleVisible}}" class="subtitle-overlay">
       <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
         <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
           <text class="subtitle-line">{{item}}</text>
         </block>
       </view>
-      <text wx:else class="subtitle">{{currentVideo.subtitle}}</text>
+      <text wx:else class="subtitle-line">{{currentVideo.subtitle}}</text>
     </view>
+  </view>
 
-    <view class="section">
-      <view class="section-header">
-        <text class="section-title">词汇释义</text>
-        <text class="hint-toggle" bindtap="toggleChineseHint">
-          {{showChineseHint ? '隐藏中文提示' : '显示中文提示'}}
+  <!-- 词汇底部抽屉 -->
+  <view wx:if="{{glossaryVisible}}" class="panel-backdrop" bindtap="closeGlossary"></view>
+  <view wx:if="{{glossaryVisible}}" class="panel glossary-panel">
+    <view class="panel-handle"></view>
+    <view class="panel-header">
+      <text class="panel-title">词汇释义</text>
+      <view class="hint-toggle {{showChineseHint ? 'is-on' : ''}}" catchtap="toggleChineseHint">
+        <text class="hint-toggle-text">
+          {{showChineseHint ? '隐藏中文' : '显示中文'}}
         </text>
       </view>
+    </view>
 
+    <scroll-view class="glossary-scroll" scroll-y enhanced show-scrollbar="{{false}}">
       <block wx:for="{{currentVideo.glossary}}" wx:key="word">
         <view class="glossary-item">
           <text class="word">{{item.word}}</text>
           <text class="meaning">{{item.meaning}}</text>
-
           <text wx:if="{{showChineseHint}}" class="chinese-hint">
             中文提示：{{item.chineseHint}}
           </text>
         </view>
       </block>
+    </scroll-view>
+  </view>
+
+  <!-- 答题底部抽屉：视频结束自动弹出 / 用户点「答题」手动弹出，遮罩可关闭 -->
+  <view wx:if="{{showQuestionDrawer}}" class="panel-backdrop" bindtap="closeQuestionDrawer"></view>
+  <view wx:if="{{showQuestionDrawer}}" class="panel question-panel">
+    <view class="panel-handle"></view>
+    <view class="panel-header">
+      <text class="panel-title">理解题</text>
+      <text class="panel-tag">{{currentIndex + 1}} / {{totalVideos}}</text>
     </view>
 
-    <view class="section">
-      <text class="section-title">理解题</text>
-      <text class="question">{{currentVideo.question.text}}</text>
+    <scroll-view class="question-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <text class="question-text">{{currentVideo.question.text}}</text>
 
-      <block wx:for="{{currentVideo.question.options}}" wx:key="index">
-        <view
-          class="option {{selectedIndex == index ? 'active' : ''}}"
-          data-index="{{index}}"
-          bindtap="chooseOption"
-        >
-          {{item}}
-        </view>
-      </block>
+      <view class="option-list">
+        <block wx:for="{{currentVideo.question.options}}" wx:key="index">
+          <view
+            class="option {{selectedIndex == index ? 'active' : ''}}"
+            data-index="{{index}}"
+            bindtap="chooseOption"
+          >
+            <text class="option-index">{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text>
+            <text class="option-text">{{item}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+
+    <view class="panel-footer">
+      <button class="primary-btn" bindtap="submitAnswer">提交答案</button>
+      <view class="replay-row" bindtap="replayVideo">
+        <text class="replay-text">重播视频</text>
+      </view>
+      <text wx:if="{{resultText}}" class="result">{{resultText}}</text>
     </view>
-
-    <button bindtap="submitAnswer">提交答案</button>
-
-    <text class="result">{{resultText}}</text>
   </view>
 </view>
