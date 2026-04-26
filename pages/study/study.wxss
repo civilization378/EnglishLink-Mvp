@@ -56,6 +56,23 @@
   line-height: 1.6;
 }
 
+.subtitle-card {
+  background: #f7fbff;
+  border: 1rpx solid #dbe9ff;
+}
+
+.subtitle-line {
+  display: block;
+  font-size: 30rpx;
+  color: #2f3f57;
+  line-height: 1.7;
+  margin-bottom: 10rpx;
+}
+
+.subtitle-line:last-child {
+  margin-bottom: 0;
+}
+
 .section {
   background: #fff;
   padding: 24rpx;

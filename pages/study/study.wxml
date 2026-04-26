@@ -18,9 +18,14 @@
     ></video>
   </view>
 
-  <view class="section">
+  <view class="section subtitle-card">
     <text class="section-title">字幕</text>
-    <text class="subtitle">{{currentVideo.subtitle}}</text>
+    <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
+      <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
+        <text class="subtitle-line">{{item}}</text>
+      </block>
+    </view>
+    <text wx:else class="subtitle">{{currentVideo.subtitle}}</text>
   </view>
 
 <view class="section">

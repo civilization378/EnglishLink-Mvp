@@ -3,39 +3,43 @@
 ## 内容 1：点咖啡
 
 标题：
-Ordering Coffee
+Ordering at Starbucks
 
 场景：
-日常生活 / 点餐
+点餐场景
 
 难度：
-A1
+A2
 
 视频链接：
-暂时为空
+http://127.0.0.1:8080/coffee-01.mp4
 
 英文字幕：
-I'd like a small coffee, please.
+I'd like a tall white chocolate mocha. Hot, please. And then may I have the banana nut bread? Yes, warmed up, please. Thank you.
 
 词汇释义：
-- small: not large
-  - 中文提示：小的
-- coffee: a hot drink
-  - 中文提示：咖啡
+- tall: a Starbucks size for drinks
+  - 中文提示：星巴克饮品规格
+- mocha: a coffee drink with chocolate
+  - 中文提示：摩卡咖啡
+- banana nut bread: a sweet bread with banana and nuts
+  - 中文提示：香蕉坚果面包
+- warmed up: heated before serving
+  - 中文提示：加热
 
 理解题：
-What does the speaker want?
+What drink does the speaker order?
 
 选项：
-A. Tea
-B. Coffee
-C. Water
+A. A small coffee
+B. A tall white chocolate mocha
+C. A cup of tea
 
 正确答案：
 B
 
 解释：
-The speaker says "I'd like a small coffee", so the answer is Coffee.
+The speaker says: I'd like a tall white chocolate mocha.
 
 ---
 

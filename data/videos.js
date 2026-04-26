@@ -3,29 +3,45 @@ const testVideoUrl = "https://www.w3schools.com/html/mov_bbb.mp4"
 const videos = [
   {
     id: 1,
-    title: "Ordering Coffee",
+    title: "Ordering at Starbucks",
     scene: "daily",
-    sceneName: "日常生活",
-    level: "A1",
+    sceneName: "点餐场景",
+    level: "A2",
     videoUrl: "http://127.0.0.1:8080/coffee-01.mp4",
-    subtitle: "I'd like a small coffee, please.",
+    subtitle: "I'd like a tall white chocolate mocha. Hot, please. And then may I have the banana nut bread? Yes, warmed up, please. Thank you.",
+    subtitleLines: [
+      "I'd like a tall white chocolate mocha.",
+      "Hot, please.",
+      "And then may I have the banana nut bread?",
+      "Yes, warmed up, please. Thank you."
+    ],
     glossary: [
       {
-        word: "small",
-        meaning: "not large",
-        chineseHint: "小的"
+        word: "tall",
+        meaning: "a Starbucks size for drinks",
+        chineseHint: "星巴克饮品规格"
       },
       {
-        word: "coffee",
-        meaning: "a hot drink",
-        chineseHint: "咖啡"
+        word: "mocha",
+        meaning: "a coffee drink with chocolate",
+        chineseHint: "摩卡咖啡"
+      },
+      {
+        word: "banana nut bread",
+        meaning: "a sweet bread with banana and nuts",
+        chineseHint: "香蕉坚果面包"
+      },
+      {
+        word: "warmed up",
+        meaning: "heated before serving",
+        chineseHint: "加热"
       }
     ],
     question: {
-      text: "What does the speaker want?",
-      options: ["Tea", "Coffee", "Water"],
+      text: "What drink does the speaker order?",
+      options: ["A small coffee", "A tall white chocolate mocha", "A cup of tea"],
       answerIndex: 1,
-      explanation: "The speaker says: I'd like a small coffee, please."
+      explanation: "The speaker says: I'd like a tall white chocolate mocha."
     }
   },
   {
