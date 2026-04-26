@@ -412,26 +412,29 @@ page {
   left: 0;
   right: 0;
   bottom: 0;
-  /* 多层奶油玻璃：左上白色高光 + 右下暖金角光 + 主体奶油半透明 */
+  /* 多层奶油玻璃：左上白色晨光 + 右上暖金角光 + 左下鼠尾草微光 + 主体奶油半透明 */
   background:
     radial-gradient(circle at 14% 0%,
-      rgba(255, 255, 255, 0.75) 0%,
-      rgba(255, 255, 255, 0) 32%),
-    radial-gradient(circle at 92% 8%,
-      rgba(231, 175, 80, 0.16) 0%,
-      rgba(231, 175, 80, 0) 38%),
+      rgba(255, 255, 255, 0.78) 0%,
+      rgba(255, 255, 255, 0) 34%),
+    radial-gradient(circle at 92% 6%,
+      rgba(231, 175, 80, 0.18) 0%,
+      rgba(231, 175, 80, 0) 40%),
+    radial-gradient(circle at 8% 96%,
+      rgba(127, 165, 138, 0.08) 0%,
+      rgba(127, 165, 138, 0) 50%),
     rgba(255, 249, 239, 0.94);
   backdrop-filter: blur(24rpx) saturate(1.12);
   -webkit-backdrop-filter: blur(24rpx) saturate(1.12);
   border-top-left-radius: 40rpx;
   border-top-right-radius: 40rpx;
-  border-top: 1rpx solid rgba(255, 255, 255, 0.78);
+  border-top: 1rpx solid rgba(255, 255, 255, 0.82);
   border-left: 1rpx solid rgba(255, 255, 255, 0.55);
   border-right: 1rpx solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.85),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.88),
     inset 0 -1rpx 0 rgba(217, 154, 43, 0.08),
-    0 -22rpx 70rpx rgba(71, 52, 32, 0.20),
+    0 -22rpx 70rpx rgba(71, 52, 32, 0.22),
     0 -6rpx 18rpx rgba(71, 52, 32, 0.08);
   padding: 16rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
   z-index: 21;
@@ -462,17 +465,19 @@ page {
 }
 
 .panel-handle {
-  width: 72rpx;
-  height: 5rpx;
+  width: 64rpx;
+  height: 4rpx;
   border-radius: 999rpx;
-  /* 浅棕 / 半透明金的精致 handle */
+  /* 浅棕 / 半透明金的精致 handle，两端淡出像一抹晨光 */
   background: linear-gradient(
     90deg,
-    rgba(217, 154, 43, 0) 0%,
-    rgba(217, 154, 43, 0.42) 50%,
-    rgba(217, 154, 43, 0) 100%
+    rgba(180, 140, 80, 0) 0%,
+    rgba(180, 140, 80, 0.34) 30%,
+    rgba(217, 154, 43, 0.40) 50%,
+    rgba(180, 140, 80, 0.34) 70%,
+    rgba(180, 140, 80, 0) 100%
   );
-  margin: 4rpx auto 22rpx;
+  margin: 6rpx auto 20rpx;
 }
 
 /* 默认行布局：词汇抽屉等单行 header 沿用原有横向布局 */
@@ -512,8 +517,9 @@ page {
   font-size: 22rpx;
   color: #A99B8C;
   color: var(--text-faint, #A99B8C);
-  letter-spacing: 1rpx;
+  letter-spacing: 1.6rpx;
   font-weight: 500;
+  font-feature-settings: "tnum";
 }
 
 /* 答题结果：副文案，柔和不刺眼 */
@@ -837,15 +843,6 @@ page {
   color: var(--text-strong, #2A2118);
 }
 
-.result {
-  display: block;
-  font-size: 26rpx;
-  color: #4FAE78;
-  color: var(--correct, #4FAE78);
-  text-align: center;
-  letter-spacing: 0.5rpx;
-}
-
 /* ============ 答题结果：标题升级（更大、更柔、不刺眼） ============ */
 .result-title-correct,
 .result-title-wrong {
@@ -881,7 +878,7 @@ page {
   font-size: 22rpx;
   color: #A99B8C;
   color: var(--text-faint, #A99B8C);
-  letter-spacing: 1rpx;
+  letter-spacing: 1.5rpx;
   font-weight: 500;
 }
 
