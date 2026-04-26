@@ -11,6 +11,42 @@ page {
   color: #FFFFFF;
 }
 
+/* ============ 动画内容层（包裹视频和浮层，panels 不在其内） ============ */
+.slide-content {
+  position: absolute;
+  inset: 0;
+  transition: opacity 220ms ease, transform 220ms ease;
+  will-change: opacity, transform;
+}
+
+.switching-next-out {
+  opacity: 0;
+  transform: translateY(-24rpx);
+}
+
+.switching-next-in {
+  animation: slideInFromBottom 220ms ease-out both;
+}
+
+.switching-prev-out {
+  opacity: 0;
+  transform: translateY(24rpx);
+}
+
+.switching-prev-in {
+  animation: slideInFromTop 220ms ease-out both;
+}
+
+@keyframes slideInFromBottom {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromTop {
+  from { opacity: 0; transform: translateY(-24rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ============ 视频层（铺满整屏） ============ */
 .video-player {
   position: absolute;

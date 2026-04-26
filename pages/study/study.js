@@ -12,7 +12,11 @@ Page({
     showQuestionDrawer: false,
     subtitleVisible: false,
     glossaryVisible: false,
-    isPlaying: true
+    isPlaying: true,
+    isSwitching: false,
+    switchDirection: '',
+    switchPhase: '',
+    slideAnimClass: ''
   },
 
   onLoad(options) {
@@ -153,6 +157,79 @@ Page({
     this.setData({
       showQuestionDrawer: false
     })
+  },
+
+  onTouchStart(e) {
+    this._touchStartY = e.touches[0].clientY
+  },
+
+  onTouchEnd(e) {
+    if (this.data.showQuestionDrawer || this.data.glossaryVisible || this.data.isSwitching) return
+    const diffY = e.changedTouches[0].clientY - this._touchStartY
+    if (diffY < -80) {
+      this.goNextVideo()
+    } else if (diffY > 80) {
+      this.goPrevVideo()
+    }
+  },
+
+  _loadVideo(newIndex, direction) {
+    const outClass = direction === 'next' ? 'switching-next-out' : 'switching-prev-out'
+    const inClass  = direction === 'next' ? 'switching-next-in'  : 'switching-prev-in'
+
+    // 第一阶段：淡出（200ms）
+    this.setData({ isSwitching: true, slideAnimClass: outClass })
+
+    setTimeout(() => {
+      // 切换内容 + 开始淡入
+      this.videoContext = null
+      this.setData({
+        currentIndex: newIndex,
+        currentVideo: videos[newIndex],
+        selectedIndex: -1,
+        resultText: '',
+        showChineseHint: false,
+        videoEnded: false,
+        showQuestionDrawer: false,
+        subtitleVisible: false,
+        glossaryVisible: false,
+        isPlaying: true,
+        slideAnimClass: inClass
+      })
+
+      // 播放新视频（等渲染稳定后）
+      setTimeout(() => {
+        try {
+          const ctx = this.ensureVideoContext()
+          if (ctx && typeof ctx.play === 'function') ctx.play()
+        } catch (err) {
+          // 静默处理
+        }
+      }, 80)
+
+      // 淡入完成后清除动画状态（220ms 对应 CSS transition 时长）
+      setTimeout(() => {
+        this.setData({ isSwitching: false, slideAnimClass: '' })
+      }, 240)
+    }, 200)
+  },
+
+  goNextVideo() {
+    const next = this.data.currentIndex + 1
+    if (next >= videos.length) {
+      wx.showToast({ title: '本轮学习已完成 🎉', icon: 'none', duration: 1500 })
+      return
+    }
+    this._loadVideo(next, 'next')
+  },
+
+  goPrevVideo() {
+    const prev = this.data.currentIndex - 1
+    if (prev < 0) {
+      wx.showToast({ title: '已经是第一条了', icon: 'none', duration: 1200 })
+      return
+    }
+    this._loadVideo(prev, 'prev')
   },
 
   replayVideo() {
