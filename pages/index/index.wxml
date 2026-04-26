@@ -1,44 +1,40 @@
 <view class="index-page">
 
-  <!-- 森林雨滴壁纸层：完整清晰底图，不叠任何全屏蒙版（不参与交互） -->
-  <view class="home-wallpaper-layer">
+  <!-- 森林壁纸层：原图 aspectFill，无米白蒙版，仅一道极轻上下 vignette 托住文字 -->
+  <view class="wallpaper">
     <image
-      class="home-wallpaper-image"
+      class="wallpaper-image"
       src="/assets/images/home-forest-bg.png"
       mode="aspectFill"
     />
+    <view class="wallpaper-vignette"></view>
   </view>
 
-  <!-- Hero · 浮在背景之上，不再装在卡片里 -->
-  <view class="hero-layer">
-    <text class="hero-eyebrow">English Link</text>
+  <!-- Hero · 直接浮在森林壁纸上 -->
+  <view class="hero">
+    <text class="hero-eyebrow">ENGLISH LINK</text>
     <text class="hero-title">看场景 · 懂英文</text>
     <text class="hero-subtitle">每天 1 分钟，看真实场景，练出不用翻译的理解力</text>
   </view>
 
-  <!-- 今日推荐 · 场景玻璃封面卡（首页视觉中心） -->
+  <!-- 今日场景主卡 · 暗色烟熏玻璃控件 -->
   <view class="scene-card">
-    <!-- 卡内多层光：暖金角光 / 鼠尾草远景 / 顶部高光线 -->
-    <view class="scene-card-bg"></view>
-    <view class="scene-card-glow scene-card-glow--gold"></view>
-    <view class="scene-card-glow scene-card-glow--sage"></view>
-    <view class="scene-card-sheen"></view>
+    <view class="card-sheen"></view>
 
-    <!-- 玻璃药丸：今日场景 / 进度 -->
     <view class="scene-card-header">
-      <view class="glass-pill glass-pill--brand">
-        <text class="glass-pill-text">今日场景</text>
+      <view class="pill pill--brand">
+        <text class="pill-text pill-text--brand">今日场景</text>
       </view>
-      <view wx:if="{{!completedAll}}" class="glass-pill glass-pill--progress">
-        <text class="glass-pill-text">第 {{recommendNumber}} / {{totalVideos}} 个场景</text>
+      <view wx:if="{{!completedAll}}" class="pill pill--ghost">
+        <text class="pill-text pill-text--ghost">第 {{recommendNumber}} / {{totalVideos}} 个场景</text>
       </view>
-      <view wx:else class="glass-pill glass-pill--done">
-        <text class="glass-pill-text">本轮已完成</text>
+      <view wx:else class="pill pill--mint">
+        <text class="pill-text pill-text--mint">本轮已完成</text>
       </view>
     </view>
 
     <block wx:if="{{!completedAll}}">
-      <text class="scene-card-title">{{todayVideo.title}}</text>
+      <text class="scene-title">{{todayVideo.title}}</text>
 
       <view class="meta-row">
         <text class="meta-text">真实场景视频</text>
@@ -50,17 +46,13 @@
 
       <text class="hook-text">看 15 秒，试试你能不能直接听懂这句英文。</text>
 
-      <!-- 液态玻璃按钮：暖金胶囊 + 柔和光斑 -->
-      <view class="liquid-button" bindtap="goStudy" hover-class="liquid-button--press" hover-stay-time="80">
-        <view class="liquid-button-glow"></view>
-        <view class="liquid-button-sheen"></view>
-        <view class="liquid-button-rim"></view>
-        <text class="liquid-button-text">▶ 开始今日 1 分钟</text>
+      <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
+        <text class="cta-text">▶ 开始今日 1 分钟</text>
       </view>
     </block>
 
     <block wx:else>
-      <text class="scene-card-title">本轮训练已完成</text>
+      <text class="scene-title">本轮训练已完成</text>
 
       <view class="meta-row">
         <text class="meta-text">{{totalVideos}} 段场景已通关</text>
@@ -68,33 +60,34 @@
 
       <text class="hook-text">把熟悉的场景再训练一遍，让英文成为本能。</text>
 
-      <view class="liquid-button" bindtap="goStudy" hover-class="liquid-button--press" hover-stay-time="80">
-        <view class="liquid-button-glow"></view>
-        <view class="liquid-button-sheen"></view>
-        <view class="liquid-button-rim"></view>
-        <text class="liquid-button-text">重新开始训练</text>
+      <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
+        <text class="cta-text">重新开始训练</text>
       </view>
     </block>
   </view>
 
-  <!-- 学习统计 · 三个玻璃胶囊 -->
+  <!-- 学习统计 · 三个暗玻璃控件 -->
   <view class="stats-row">
-    <view class="glass-stat">
-      <text class="glass-stat-num">{{total}}</text>
-      <text class="glass-stat-label">已学习</text>
+    <view class="stat-card">
+      <view class="card-sheen card-sheen--narrow"></view>
+      <text class="stat-num">{{total}}</text>
+      <text class="stat-label">已学习</text>
     </view>
-    <view class="glass-stat">
-      <text class="glass-stat-num">{{correct}}</text>
-      <text class="glass-stat-label">答对</text>
+    <view class="stat-card">
+      <view class="card-sheen card-sheen--narrow"></view>
+      <text class="stat-num">{{correct}}</text>
+      <text class="stat-label">答对</text>
     </view>
-    <view class="glass-stat">
-      <text class="glass-stat-num {{total > 0 && accuracy >= 80 ? 'glass-stat-num--mint' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
-      <text class="glass-stat-label">正确率</text>
+    <view class="stat-card">
+      <view class="card-sheen card-sheen--narrow"></view>
+      <text class="stat-num {{total > 0 && accuracy >= 80 ? 'stat-num--mint' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
+      <text class="stat-label">正确率</text>
     </view>
   </view>
 
-  <!-- 今日训练路径 · 轻玻璃面板 -->
-  <view class="scene-glass-panel">
+  <!-- 训练路径 · 弱一档暗玻璃面板 -->
+  <view class="path-panel">
+    <view class="card-sheen"></view>
     <text class="panel-title">今天你会完成</text>
     <view class="panel-list">
       <view class="panel-item">
@@ -112,20 +105,9 @@
     </view>
   </view>
 
-  <!-- 我的入口 · 轻玻璃文字胶囊 -->
+  <!-- 我的入口 · 暗玻璃文字胶囊 -->
   <view class="profile-link" bindtap="goMy" hover-class="profile-link--press" hover-stay-time="60">
     <text class="profile-link-text">查看我的学习档案 →</text>
   </view>
-
-  <!-- 空间森林玻璃 · 前景树枝层（已暂时停用：贴纸感过重，影响首页质感） -->
-  <!-- 如需重新启用 iOS 空间壁纸式的前景层效果，请同时取消下方注释、并移除
-       index.wxss 中 .forest-foreground-branch 的 display: none。 -->
-  <!--
-  <image
-    class="forest-foreground-branch"
-    src="/assets/images/home-forest-branch.png"
-    mode="widthFix"
-  />
-  -->
 
 </view>

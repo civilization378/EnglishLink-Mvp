@@ -1,42 +1,40 @@
 /* ============================================================
- * Scene Liquid Glass · 场景液态玻璃 · Home
- * 底层：完整清晰的森林壁纸（无任何全屏蒙版）
- * 上层：每张卡片自带玻璃材质（半透明 + backdrop-filter + 高光 + 阴影）
+ * Forest Spatial Glass · Home
+ * 深绿森林壁纸 + 浮动暗色烟熏玻璃控件
+ * 设计原则：空间感 / 可读性 / 克制 / 不贴纸 / 不水滴 / 不洗白
  * ============================================================ */
 
+/* 加载兜底：深森林色，避免冷启动闪白 */
 page {
-  background: #F4ECDC;
-  background: var(--bg-page, #F4ECDC);
+  background: #0E1410;
 }
 
-/* ============ Page · 仅作图片加载兜底，不覆盖壁纸 ============ */
+/* ============ Page · 仅作图片加载兜底，不洗白壁纸 ============ */
 .index-page {
   position: relative;
   min-height: 100vh;
-  /* 加载兜底底色：壁纸 aspectFill 后会完全盖住这一层；只在图片加载失败时可见 */
-  background: #F4ECDC;
-  background: var(--bg-page, #F4ECDC);
+  background: #0E1410;
   padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 32rpx;
+  gap: 28rpx;
   overflow: hidden;
   animation: pageFadeIn 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* 内容层始终浮在壁纸之上 */
-.index-page > .hero-layer,
+/* 内容层永远在壁纸之上 */
+.index-page > .hero,
 .index-page > .scene-card,
 .index-page > .stats-row,
-.index-page > .scene-glass-panel,
+.index-page > .path-panel,
 .index-page > .profile-link {
   position: relative;
   z-index: 1;
 }
 
-/* ============ Home Wallpaper · 森林晨光壁纸层 ============ */
-.home-wallpaper-layer {
+/* ============ Wallpaper · 森林壁纸层 ============ */
+.wallpaper {
   position: absolute;
   top: 0;
   right: 0;
@@ -48,7 +46,7 @@ page {
 }
 
 /* 壁纸图：完整清晰显示，无 blur / 无降透明 / 无饱和洗白 */
-.home-wallpaper-image {
+.wallpaper-image {
   position: absolute;
   top: 0;
   right: 0;
@@ -62,105 +60,8 @@ page {
   pointer-events: none;
 }
 
-/* ============ Forest Foreground Branch · 空间森林玻璃前景树枝层（暂时停用） ============
- * 用于测试 iOS 空间壁纸式的前景 / 中景 / 背景层次：
- *   z-index 0：森林背景壁纸
- *   z-index 1：首页内容（hero / 玻璃卡片 / 统计 / 路径 / 入口）
- *   z-index 2：前景树枝（轻悬浮在玻璃卡片之上，仅作氛围，不参与交互）
- * 当前实测贴纸感过重、破坏首页质感，因此 WXML 中的 image 已注释，
- * 这里同时使用 display: none 作为兜底，避免任何残留渲染。
- * 重新启用时：取消 index.wxml 中前景 image 的注释，并移除下方 display: none。
- */
-.forest-foreground-branch {
-  display: none;
-  position: absolute;
-  top: 150rpx;
-  right: -220rpx;
-  width: 520rpx;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.52;
-  filter: drop-shadow(0 18rpx 32rpx rgba(0, 0, 0, 0.18));
-}
-
-/* ============ Hero · 浮在背景上 ============ */
-.hero-layer {
-  display: flex;
-  flex-direction: column;
-  gap: 14rpx;
-  padding: 12rpx 4rpx 6rpx;
-  animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 40ms both;
-}
-
-/* Hero 直接坐在深色森林壁纸上：暖奶油 / 蜜色文字 + 深色 halo，不加全屏蒙版 */
-.hero-eyebrow {
-  font-size: 22rpx;
-  color: #E0B872;
-  letter-spacing: 8rpx;
-  text-transform: uppercase;
-  font-weight: 700;
-  text-shadow:
-    0 1rpx 6rpx rgba(15, 12, 8, 0.65),
-    0 1rpx 2rpx rgba(15, 12, 8, 0.5);
-}
-
-.hero-title {
-  font-size: 50rpx;
-  font-weight: 700;
-  color: #F5E9C8;
-  letter-spacing: -0.2rpx;
-  line-height: 1.12;
-  text-shadow:
-    0 2rpx 16rpx rgba(15, 12, 8, 0.7),
-    0 1rpx 2rpx rgba(15, 12, 8, 0.55),
-    0 0 28rpx rgba(15, 12, 8, 0.35);
-}
-
-.hero-subtitle {
-  font-size: 26rpx;
-  font-weight: 500;
-  color: #CFC0A2;
-  line-height: 1.55;
-  letter-spacing: 0.3rpx;
-  max-width: 560rpx;
-  margin-top: 6rpx;
-  text-shadow:
-    0 1rpx 10rpx rgba(15, 12, 8, 0.65),
-    0 1rpx 2rpx rgba(15, 12, 8, 0.5);
-}
-
-/* ============ Scene Card · 场景玻璃封面卡 ============ */
-.scene-card {
-  position: relative;
-  border-radius: 36rpx;
-  padding: 32rpx 30rpx 30rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-  overflow: hidden;
-  /* 单层奶油玻璃 + 顶部白色高光 + 右上暖金光（仅卡片内部，非全屏） */
-  background:
-    radial-gradient(circle at 18% -8%,
-      rgba(255, 255, 255, 0.42) 0%,
-      rgba(255, 255, 255, 0) 38%),
-    radial-gradient(circle at 92% 22%,
-      rgba(231, 175, 80, 0.14) 0%,
-      rgba(231, 175, 80, 0) 44%),
-    rgba(255, 249, 239, 0.42);
-  border: 1rpx solid rgba(255, 255, 255, 0.72);
-  /* 玻璃厚度：外阴影 + 上下内高光 */
-  box-shadow:
-    0 24rpx 70rpx rgba(30, 24, 18, 0.18),
-    0 6rpx 16rpx rgba(30, 24, 18, 0.08),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.76),
-    inset 0 -1rpx 0 rgba(80, 60, 40, 0.10);
-  backdrop-filter: blur(26rpx) saturate(1.18);
-  -webkit-backdrop-filter: blur(26rpx) saturate(1.18);
-  animation: fadeSlideUp 420ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 100ms both;
-}
-
-/* 卡内远景气氛（地平线一抹鼠尾草） */
-.scene-card-bg {
+/* 极轻暗色 vignette：仅用于托住 Hero 与底部 CTA 文字，不洗白原图 */
+.wallpaper-vignette {
   position: absolute;
   top: 0;
   right: 0;
@@ -168,53 +69,100 @@ page {
   left: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 320rpx 80rpx at 78% 100%,
-      rgba(127, 165, 138, 0.14) 0%,
-      rgba(127, 165, 138, 0) 70%),
-    radial-gradient(ellipse 240rpx 60rpx at 22% 100%,
-      rgba(217, 154, 43, 0.10) 0%,
-      rgba(217, 154, 43, 0) 70%);
+    linear-gradient(180deg,
+      rgba(8, 14, 10, 0.42) 0%,
+      rgba(8, 14, 10, 0.10) 18%,
+      rgba(8, 14, 10, 0.00) 42%,
+      rgba(8, 14, 10, 0.10) 76%,
+      rgba(8, 14, 10, 0.38) 100%);
 }
 
-.scene-card-glow {
-  position: absolute;
-  pointer-events: none;
-  filter: blur(28rpx);
-  border-radius: 50%;
+/* ============ Hero · 浮在壁纸上的暖白主标 ============ */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 8rpx 4rpx 4rpx;
+  animation: fadeSlideUp 420ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 40ms both;
 }
 
-.scene-card-glow--gold {
-  top: -100rpx;
-  right: -80rpx;
-  width: 320rpx;
-  height: 320rpx;
-  background: radial-gradient(circle,
-    rgba(231, 175, 80, 0.34) 0%,
-    rgba(231, 175, 80, 0) 65%);
+.hero-eyebrow {
+  font-size: 22rpx;
+  color: #E8C77D;
+  letter-spacing: 8rpx;
+  font-weight: 700;
+  text-shadow:
+    0 1rpx 8rpx rgba(0, 0, 0, 0.55),
+    0 1rpx 2rpx rgba(0, 0, 0, 0.45);
 }
 
-.scene-card-glow--sage {
-  bottom: -120rpx;
-  left: -100rpx;
-  width: 280rpx;
-  height: 280rpx;
-  background: radial-gradient(circle,
-    rgba(127, 165, 138, 0.22) 0%,
-    rgba(127, 165, 138, 0) 65%);
+.hero-title {
+  font-size: 54rpx;
+  font-weight: 700;
+  color: #F7EFD9;
+  letter-spacing: -0.3rpx;
+  line-height: 1.14;
+  text-shadow:
+    0 2rpx 18rpx rgba(0, 0, 0, 0.55),
+    0 1rpx 2rpx rgba(0, 0, 0, 0.50),
+    0 0 28rpx rgba(0, 0, 0, 0.30);
 }
 
-/* 顶部 1rpx 玻璃边缘高光线 */
-.scene-card-sheen {
+.hero-subtitle {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: rgba(245, 239, 226, 0.78);
+  line-height: 1.55;
+  letter-spacing: 0.3rpx;
+  max-width: 560rpx;
+  margin-top: 4rpx;
+  text-shadow:
+    0 1rpx 8rpx rgba(0, 0, 0, 0.55),
+    0 1rpx 2rpx rgba(0, 0, 0, 0.40);
+}
+
+/* ============ Glass Sheen · 卡片顶部 1rpx 玻璃唇高光 ============ */
+.card-sheen {
   position: absolute;
   top: 0;
-  left: 6%;
-  right: 6%;
+  left: 8%;
+  right: 8%;
   height: 1rpx;
   background: linear-gradient(90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0.55) 50%,
     rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
+}
+
+.card-sheen--narrow {
+  left: 18%;
+  right: 18%;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%);
+}
+
+/* ============ Scene Card · 主卡 暗色烟熏玻璃 ============ */
+.scene-card {
+  position: relative;
+  border-radius: 32rpx;
+  padding: 32rpx 30rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  overflow: hidden;
+  background: rgba(15, 20, 16, 0.42);
+  border: 1rpx solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 28rpx 80rpx rgba(0, 0, 0, 0.36),
+    0 6rpx 18rpx rgba(0, 0, 0, 0.22),
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.28),
+    inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(30rpx) saturate(1.25);
+  -webkit-backdrop-filter: blur(30rpx) saturate(1.25);
+  animation: fadeSlideUp 460ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 100ms both;
 }
 
 .scene-card-header {
@@ -226,83 +174,63 @@ page {
   gap: 14rpx;
 }
 
-/* ============ Glass Pill · 玻璃药丸标签 ============ */
-.glass-pill {
+/* ============ Pill · 玻璃药丸标签 ============ */
+.pill {
   position: relative;
   display: inline-flex;
   align-items: center;
   padding: 8rpx 20rpx;
   border-radius: 999rpx;
-  background:
-    radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0) 60%),
-    rgba(255, 255, 255, 0.42);
-  border: 1rpx solid rgba(255, 255, 255, 0.78);
-  box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.85),
-    0 4rpx 12rpx rgba(88, 61, 32, 0.06);
-  backdrop-filter: blur(10rpx) saturate(1.05);
-  -webkit-backdrop-filter: blur(10rpx) saturate(1.05);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8rpx);
+  -webkit-backdrop-filter: blur(8rpx);
 }
 
-.glass-pill-text {
+.pill-text {
   font-size: 22rpx;
   font-weight: 700;
-  color: #B97818;
-  color: var(--primary-press, #B97818);
   letter-spacing: 4rpx;
 }
 
-.glass-pill--brand {
-  background:
-    radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0) 60%),
-    rgba(217, 154, 43, 0.16);
-  border-color: rgba(217, 154, 43, 0.35);
+.pill--brand {
+  background: rgba(217, 154, 43, 0.18);
+  border-color: rgba(232, 187, 95, 0.42);
 }
 
-.glass-pill--progress {
-  background:
-    radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.7) 0%,
-      rgba(255, 255, 255, 0) 60%),
-    rgba(80, 60, 40, 0.05);
-  border-color: rgba(255, 255, 255, 0.55);
+.pill-text--brand {
+  color: #F0C57A;
 }
 
-.glass-pill--progress .glass-pill-text {
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+.pill--ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.pill-text--ghost {
+  color: rgba(245, 239, 226, 0.78);
   font-weight: 600;
   letter-spacing: 1.5rpx;
 }
 
-.glass-pill--done {
-  background:
-    radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.78) 0%,
-      rgba(255, 255, 255, 0) 60%),
-    rgba(127, 165, 138, 0.18);
-  border-color: rgba(127, 165, 138, 0.42);
+.pill--mint {
+  background: rgba(111, 211, 154, 0.16);
+  border-color: rgba(111, 211, 154, 0.42);
 }
 
-.glass-pill--done .glass-pill-text {
-  color: #4FAE78;
-  color: var(--correct, #4FAE78);
+.pill-text--mint {
+  color: #8BDFB0;
   letter-spacing: 2rpx;
 }
 
 /* ============ Scene Card 内文 ============ */
-.scene-card-title {
+.scene-title {
   position: relative;
   z-index: 1;
   font-size: 40rpx;
   font-weight: 700;
-  color: #1F1610;
-  color: var(--text-strong, #1F1610);
-  line-height: 1.2;
+  color: #F7EFD9;
+  line-height: 1.22;
   letter-spacing: 0.2rpx;
   margin-top: 4rpx;
 }
@@ -318,251 +246,169 @@ page {
 
 .meta-text {
   font-size: 24rpx;
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+  color: rgba(245, 239, 226, 0.72);
   letter-spacing: 0.3rpx;
 }
 
 .meta-dot {
   font-size: 24rpx;
-  color: #BBA999;
-  color: var(--text-faint, #BBA999);
+  color: rgba(245, 239, 226, 0.42);
 }
 
 .hook-text {
   position: relative;
   z-index: 1;
   font-size: 24rpx;
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+  color: rgba(245, 239, 226, 0.62);
   line-height: 1.6;
   letter-spacing: 0.2rpx;
-  padding: 6rpx 0 2rpx;
+  padding: 4rpx 0 2rpx;
 }
 
-/* ============ Liquid Button · 液态玻璃暖金胶囊 ============ */
-.liquid-button {
+/* ============ CTA · 暖金主按钮（页面唯一强 CTA） ============ */
+.cta-button {
   position: relative;
   z-index: 1;
-  margin-top: 14rpx;
+  margin-top: 12rpx;
   height: 100rpx;
   border-radius: 999rpx;
   border-radius: var(--radius-pill, 999rpx);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  /* 暖金液态：上沿微亮 + 主体柔金 + 下沿微暗（极轻透明，更像液体玻璃） */
-  background:
-    linear-gradient(180deg,
-      rgba(232, 177, 76, 0.96) 0%,
-      rgba(220, 159, 48, 0.94) 52%,
-      rgba(192, 133, 26, 0.92) 100%);
+  background: linear-gradient(180deg, #F0B94B 0%, #D99A2B 100%);
   box-shadow:
     inset 0 2rpx 0 rgba(255, 232, 184, 0.55),
     inset 0 -2rpx 4rpx rgba(140, 86, 14, 0.20),
-    0 18rpx 38rpx rgba(217, 154, 43, 0.38),
-    0 6rpx 14rpx rgba(217, 154, 43, 0.22);
+    0 14rpx 34rpx rgba(217, 154, 43, 0.34),
+    0 4rpx 12rpx rgba(217, 154, 43, 0.20);
   transition:
     transform 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     box-shadow 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     opacity 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
-/* 上方一团柔光斑（不再是一条横向白条） */
-.liquid-button-glow {
-  position: absolute;
-  top: -52%;
-  left: 18%;
-  width: 64%;
-  height: 130%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center,
-    rgba(255, 245, 220, 0.55) 0%,
-    rgba(255, 245, 220, 0) 65%);
-  filter: blur(10rpx);
-  pointer-events: none;
-}
-
-/* 底部一团暖光（玻璃内反射） */
-.liquid-button-sheen {
-  position: absolute;
-  bottom: -30%;
-  left: 12%;
-  width: 56%;
-  height: 70%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center,
-    rgba(255, 218, 150, 0.45) 0%,
-    rgba(255, 218, 150, 0) 70%);
-  filter: blur(8rpx);
-  pointer-events: none;
-}
-
-/* 内边缘一圈极细高光（玻璃唇） */
-.liquid-button-rim {
-  position: absolute;
-  top: 1rpx;
-  right: 1rpx;
-  bottom: 1rpx;
-  left: 1rpx;
-  border-radius: 999rpx;
-  border: 1rpx solid rgba(255, 255, 255, 0.22);
-  pointer-events: none;
-}
-
-.liquid-button-text {
+.cta-text {
   position: relative;
   z-index: 1;
   font-size: 31rpx;
   font-weight: 700;
   color: #FFFFFF;
   letter-spacing: 1.2rpx;
-  text-shadow: 0 1rpx 2rpx rgba(120, 70, 10, 0.22);
+  text-shadow: 0 1rpx 2rpx rgba(120, 70, 10, 0.28);
 }
 
-.liquid-button--press {
+.cta-button--press {
   transform: translateY(2rpx) scale(0.985);
   opacity: 0.96;
   box-shadow:
     inset 0 1rpx 0 rgba(255, 255, 255, 0.30),
-    inset 0 -1rpx 0 rgba(140, 86, 14, 0.20),
-    0 8rpx 18rpx rgba(217, 154, 43, 0.26);
+    inset 0 -1rpx 0 rgba(140, 86, 14, 0.18),
+    0 8rpx 18rpx rgba(217, 154, 43, 0.24);
 }
 
-/* ============ Glass Stat · 三个玻璃胶囊 ============ */
+/* ============ Stats · 三个暗玻璃统计控件 ============ */
 .stats-row {
   display: flex;
   gap: 14rpx;
   animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 200ms both;
 }
 
-.glass-stat {
+.stat-card {
   position: relative;
   flex: 1;
-  border-radius: 28rpx;
-  padding: 26rpx 12rpx 22rpx;
+  border-radius: 26rpx;
+  padding: 24rpx 12rpx 20rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6rpx;
+  gap: 4rpx;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.50) 0%,
-      rgba(255, 255, 255, 0) 60%),
-    rgba(255, 249, 239, 0.30);
-  border: 1rpx solid rgba(255, 255, 255, 0.62);
+  background: rgba(15, 20, 16, 0.38);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
-    inset 0 -1rpx 0 rgba(80, 60, 40, 0.08),
-    0 14rpx 30rpx rgba(30, 24, 18, 0.14);
-  backdrop-filter: blur(22rpx) saturate(1.16);
-  -webkit-backdrop-filter: blur(22rpx) saturate(1.16);
+    0 18rpx 40rpx rgba(0, 0, 0, 0.28),
+    0 4rpx 10rpx rgba(0, 0, 0, 0.18),
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.20),
+    inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(26rpx) saturate(1.20);
+  -webkit-backdrop-filter: blur(26rpx) saturate(1.20);
 }
 
-.glass-stat::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 16%;
-  right: 16%;
-  height: 1rpx;
-  background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0) 100%);
-  pointer-events: none;
-}
-
-.glass-stat:nth-child(1) {
+.stat-card:nth-child(1) {
   animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 220ms both;
 }
 
-.glass-stat:nth-child(2) {
+.stat-card:nth-child(2) {
   animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 280ms both;
 }
 
-.glass-stat:nth-child(3) {
+.stat-card:nth-child(3) {
   animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 340ms both;
 }
 
-.glass-stat-num {
+.stat-num {
+  position: relative;
+  z-index: 1;
   font-size: 44rpx;
   font-weight: 700;
-  color: #1F1610;
-  color: var(--text-strong, #1F1610);
+  color: #F7EFD9;
   letter-spacing: 0.3rpx;
   line-height: 1.2;
   font-feature-settings: "tnum";
 }
 
-/* 正确率绿要够暖、不刺眼，不能比主卡更亮 */
-.glass-stat-num--mint {
-  color: #5C9B7A;
+/* 正确率：柔和薄荷绿，非荧光绿 */
+.stat-num--mint {
+  color: #6FD39A;
 }
 
-.glass-stat-label {
+.stat-label {
+  position: relative;
+  z-index: 1;
   font-size: 22rpx;
   font-weight: 500;
-  color: #6E5E4F;
+  color: rgba(245, 239, 226, 0.58);
   letter-spacing: 1rpx;
   margin-top: 2rpx;
 }
 
-/* ============ Scene Glass Panel · 训练路径 轻玻璃面板 ============ */
-.scene-glass-panel {
+/* ============ Path Panel · 训练路径 弱一档暗玻璃 ============ */
+.path-panel {
   position: relative;
-  border-radius: 32rpx;
+  border-radius: 30rpx;
   padding: 28rpx 30rpx 26rpx;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 18rpx;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 0% 0%,
-      rgba(255, 255, 255, 0.36) 0%,
-      rgba(255, 255, 255, 0) 50%),
-    radial-gradient(circle at 100% 100%,
-      rgba(217, 154, 43, 0.10) 0%,
-      rgba(217, 154, 43, 0) 50%),
-    rgba(255, 249, 239, 0.34);
-  border: 1rpx solid rgba(255, 255, 255, 0.58);
+  background: rgba(15, 20, 16, 0.34);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.66),
-    inset 0 -1rpx 0 rgba(80, 60, 40, 0.08),
-    0 14rpx 30rpx rgba(30, 24, 18, 0.14);
-  backdrop-filter: blur(24rpx) saturate(1.18);
-  -webkit-backdrop-filter: blur(24rpx) saturate(1.18);
+    0 18rpx 44rpx rgba(0, 0, 0, 0.26),
+    0 4rpx 10rpx rgba(0, 0, 0, 0.18),
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.18),
+    inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(28rpx) saturate(1.18);
+  -webkit-backdrop-filter: blur(28rpx) saturate(1.18);
   animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 280ms both;
 }
 
-.scene-glass-panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1rpx;
-  background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.7) 50%,
-    rgba(255, 255, 255, 0) 100%);
-  pointer-events: none;
-}
-
 .panel-title {
+  position: relative;
+  z-index: 1;
   font-size: 26rpx;
   font-weight: 600;
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+  color: rgba(245, 239, 226, 0.78);
   letter-spacing: 1.5rpx;
 }
 
 .panel-list {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 14rpx;
 }
 
 .panel-item {
@@ -574,8 +420,7 @@ page {
 .panel-num {
   font-size: 22rpx;
   font-weight: 700;
-  color: #B97818;
-  color: var(--primary-press, #B97818);
+  color: #F0C57A;
   letter-spacing: 1rpx;
   width: 44rpx;
   flex-shrink: 0;
@@ -584,28 +429,27 @@ page {
 
 .panel-text {
   font-size: 26rpx;
-  color: #3E3328;
-  color: var(--text-main, #3E3328);
+  color: rgba(245, 239, 226, 0.86);
   line-height: 1.5;
   letter-spacing: 0.2rpx;
 }
 
-/* ============ Profile Link · 轻玻璃文字胶囊 ============ */
+/* ============ Profile Link · 暗玻璃文字胶囊 ============ */
 .profile-link {
-  margin: 8rpx auto 0;
-  padding: 18rpx 38rpx;
+  margin: 4rpx auto 0;
+  padding: 16rpx 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 999rpx;
   border-radius: var(--radius-pill, 999rpx);
-  background: rgba(255, 249, 239, 0.28);
-  border: 1rpx solid rgba(255, 255, 255, 0.55);
+  background: rgba(15, 20, 16, 0.34);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.60),
-    0 8rpx 22rpx rgba(30, 24, 18, 0.12);
-  backdrop-filter: blur(18rpx) saturate(1.12);
-  -webkit-backdrop-filter: blur(18rpx) saturate(1.12);
+    0 10rpx 24rpx rgba(0, 0, 0, 0.22),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(20rpx) saturate(1.12);
+  -webkit-backdrop-filter: blur(20rpx) saturate(1.12);
   transition:
     opacity 140ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     background 140ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
@@ -613,15 +457,14 @@ page {
 }
 
 .profile-link--press {
-  opacity: 0.82;
-  background: rgba(255, 249, 239, 0.44);
+  opacity: 0.86;
+  background: rgba(15, 20, 16, 0.50);
 }
 
 .profile-link-text {
   font-size: 24rpx;
-  color: #4A3E33;
+  color: rgba(245, 239, 226, 0.82);
   letter-spacing: 1.2rpx;
-  text-shadow: 0 1rpx 0 rgba(255, 255, 255, 0.5);
 }
 
 /* ============ Keyframes ============ */

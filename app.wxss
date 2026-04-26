@@ -1,35 +1,61 @@
 /* ============================================================
- * Aurora Cinema · 极光影室 · Global Design Tokens
- * 99% calm immersion, 1% aurora — used only on progress / correct.
- * Tokens are exposed on `page` so they cascade to every wxss file.
- * Hex fallbacks are provided alongside var() in critical declarations.
+ * Warm Liquid Glass · 晨光玻璃 · Global Design Tokens
+ * Cream-light base · warm amber CTA · sage reserved for progress.
+ * Liquid Glass layer: cream glass cards, soft highlights, gentle ambient light.
+ * 99% calm warmth, small sage accents only on correct / progress.
+ * Hex fallbacks live alongside var() in critical declarations.
  * ============================================================ */
 page {
-  /* Surfaces */
-  --bg-page: #0A0F1F;
-  --bg-surface-1: #131A2E;
-  --bg-surface-2: #1B2440;
-  --bg-glass: rgba(15, 23, 42, 0.55);
-  --hairline: rgba(255, 255, 255, 0.06);
+  /* Surfaces — warm paper / cream */
+  --bg-page: #F7F1E8;
+  --bg-surface-1: #FFF9EF;
+  --bg-surface-2: #F1E6D6;
+  --bg-soft: #EFE3D0;
 
-  /* Brand & accent */
-  --primary: #4F7CFF;
-  --primary-press: #3B63D9;
-  --aurora-mint: #5EEAD4;
-  --sunrise-gold: #FBBF24;
+  /* Brand & accent — warm lamp light */
+  --primary: #D99A2B;
+  --primary-press: #B97818;
+
+  /* Sage / mint — reserved for growth / progress */
+  --sage: #7FA58A;
+  --sage-soft: #E3EFE6;
+  --aurora-mint: #6FBF8F;
 
   /* Semantic */
-  --correct: #22D3A0;
-  --wrong: #F87171;
+  --correct: #4FAE78;
+  --wrong: #D96C5F;
 
-  /* Text */
-  --text-strong: #F8FAFC;
-  --text-mute: #9CA8C0;
-  --text-faint: #5B6884;
+  /* Text — deep warm browns */
+  --text-strong: #2A2118;
+  --text-main: #3E3328;
+  --text-mute: #7C6F62;
+  --text-faint: #A99B8C;
+
+  /* Hairline */
+  --hairline: rgba(80, 60, 40, 0.10);
 
   /* Shadows */
-  --shadow-cta: 0 12rpx 32rpx rgba(79, 124, 255, 0.32);
-  --shadow-glow-mint: 0 0 32rpx rgba(94, 234, 212, 0.45);
+  --shadow-card: 0 16rpx 48rpx rgba(71, 52, 32, 0.08);
+  --shadow-cta: 0 14rpx 34rpx rgba(217, 154, 43, 0.26);
+
+  /* ===== Liquid Glass tokens (additive) ===== */
+  /* Translucent cream surfaces for floating glass cards */
+  --glass-bg: rgba(255, 249, 239, 0.72);
+  --glass-bg-strong: rgba(255, 249, 239, 0.88);
+  --glass-bg-soft: rgba(255, 255, 255, 0.48);
+
+  /* Edges & highlights for glass material */
+  --glass-border: rgba(255, 255, 255, 0.72);
+  --glass-border-warm: rgba(217, 154, 43, 0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.55);
+
+  /* Glass-specific shadows — softer, deeper for floating feel */
+  --shadow-glass: 0 18rpx 60rpx rgba(88, 61, 32, 0.10);
+  --shadow-soft: 0 10rpx 34rpx rgba(88, 61, 32, 0.07);
+
+  /* Ambient warm-lamp / sage light spots used as page decoration */
+  --ambient-gold: rgba(217, 154, 43, 0.16);
+  --ambient-sage: rgba(127, 165, 138, 0.16);
 
   /* Easing */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -42,11 +68,41 @@ page {
   --radius-pill: 999rpx;
 
   /* Page defaults */
-  background: #0A0F1F;
+  background: #F7F1E8;
   background: var(--bg-page);
-  color: #F8FAFC;
+  color: #2A2118;
   color: var(--text-strong);
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;
   line-height: 1.55;
+}
+
+/* ============================================================
+ * Shared glass primitives — page ambient lights + glass surface
+ * Uses pointer-events: none so they never block taps.
+ * ============================================================ */
+.ambient {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40rpx);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-gold {
+  top: -160rpx;
+  left: -120rpx;
+  width: 520rpx;
+  height: 520rpx;
+  background: radial-gradient(circle, rgba(217, 154, 43, 0.16) 0%, rgba(217, 154, 43, 0) 70%);
+  background: radial-gradient(circle, var(--ambient-gold, rgba(217, 154, 43, 0.16)) 0%, rgba(217, 154, 43, 0) 70%);
+}
+
+.ambient-sage {
+  bottom: -180rpx;
+  right: -140rpx;
+  width: 560rpx;
+  height: 560rpx;
+  background: radial-gradient(circle, rgba(127, 165, 138, 0.14) 0%, rgba(127, 165, 138, 0) 70%);
+  background: radial-gradient(circle, var(--ambient-sage, rgba(127, 165, 138, 0.14)) 0%, rgba(127, 165, 138, 0) 70%);
 }
