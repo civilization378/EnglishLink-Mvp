@@ -4,7 +4,7 @@
   <view class="wallpaper">
     <image
       class="wallpaper-photo"
-      src="/assets/images/home-forest-bg.png"
+      src="/assets/images/home-forest-bg.jpg"
       mode="aspectFill"
     />
   </view>

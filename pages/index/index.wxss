@@ -1,6 +1,6 @@
 /* ============================================================
  * Forest Spatial Glass · Home (single-image edition)
- * 仅使用 home-forest-bg.png 一张图，靠 CSS 模拟 iOS 空间壁纸：
+ * 仅使用 home-forest-bg.jpg 一张图，靠 CSS 模拟 iOS 空间壁纸：
  *   照片 → 系统级处理（brightness/saturate/contrast）
  *   + 顶部 ambient 光 + 底部暗场（大气纵深）
  *   + 边缘 vignette（取景框 / 照片质感）
