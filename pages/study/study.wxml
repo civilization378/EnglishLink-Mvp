@@ -18,7 +18,10 @@
     ></video>
   </view>
 
- <text class="question">{{currentVideo.question.text}}</text>
+  <view class="section">
+    <text class="section-title">字幕</text>
+    <text class="subtitle">{{currentVideo.subtitle}}</text>
+  </view>
 
 <view class="section">
   <view class="section-header">
@@ -42,7 +45,7 @@
 
   <view class="section">
     <text class="section-title">理解题</text>
-    <text class="question">{{currentVideo.question}}</text>
+    <text class="question">{{currentVideo.question.text}}</text>
 
     <block wx:for="{{currentVideo.question.options}}" wx:key="index">
       <view 

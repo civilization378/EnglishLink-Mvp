@@ -7,7 +7,7 @@ const videos = [
     scene: "daily",
     sceneName: "日常生活",
     level: "A1",
-    videoUrl: testVideoUrl,
+    videoUrl: "http://127.0.0.1:8080/coffee-01.mp4",
     subtitle: "I'd like a small coffee, please.",
     glossary: [
       {
