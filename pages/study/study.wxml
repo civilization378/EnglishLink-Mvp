@@ -10,60 +10,68 @@
 
   <view class="video-card">
     <video
+      id="mainVideo"
       class="video-player {{currentVideo.videoOrientation === 'portrait' ? 'video-player-portrait' : 'video-player-landscape'}}"
       src="{{currentVideo.videoUrl}}"
       controls
-      autoplay="{{false}}"
+      autoplay="{{true}}"
       object-fit="contain"
+      bindended="onVideoEnded"
     ></video>
   </view>
 
-  <view class="section subtitle-card">
-    <text class="section-title">字幕</text>
-    <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
-      <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
-        <text class="subtitle-line">{{item}}</text>
+  <view wx:if="{{!showQuestion}}" class="video-hint">
+    <text class="video-hint-text">先观看视频，结束后开始答题</text>
+  </view>
+
+  <view wx:if="{{showQuestion}}" class="question-stage fade-in">
+    <view class="section subtitle-card">
+      <text class="section-title">字幕</text>
+      <view wx:if="{{currentVideo.subtitleLines && currentVideo.subtitleLines.length > 0}}">
+        <block wx:for="{{currentVideo.subtitleLines}}" wx:key="index">
+          <text class="subtitle-line">{{item}}</text>
+        </block>
+      </view>
+      <text wx:else class="subtitle">{{currentVideo.subtitle}}</text>
+    </view>
+
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">词汇释义</text>
+        <text class="hint-toggle" bindtap="toggleChineseHint">
+          {{showChineseHint ? '隐藏中文提示' : '显示中文提示'}}
+        </text>
+      </view>
+
+      <block wx:for="{{currentVideo.glossary}}" wx:key="word">
+        <view class="glossary-item">
+          <text class="word">{{item.word}}</text>
+          <text class="meaning">{{item.meaning}}</text>
+
+          <text wx:if="{{showChineseHint}}" class="chinese-hint">
+            中文提示：{{item.chineseHint}}
+          </text>
+        </view>
       </block>
     </view>
-    <text wx:else class="subtitle">{{currentVideo.subtitle}}</text>
-  </view>
 
-<view class="section">
-  <view class="section-header">
-    <text class="section-title">词汇释义</text>
-    <text class="hint-toggle" bindtap="toggleChineseHint">
-      {{showChineseHint ? '隐藏中文提示' : '显示中文提示'}}
-    </text>
-  </view>
+    <view class="section">
+      <text class="section-title">理解题</text>
+      <text class="question">{{currentVideo.question.text}}</text>
 
-  <block wx:for="{{currentVideo.glossary}}" wx:key="word">
-    <view class="glossary-item">
-      <text class="word">{{item.word}}</text>
-      <text class="meaning">{{item.meaning}}</text>
-
-      <text wx:if="{{showChineseHint}}" class="chinese-hint">
-        中文提示：{{item.chineseHint}}
-      </text>
+      <block wx:for="{{currentVideo.question.options}}" wx:key="index">
+        <view
+          class="option {{selectedIndex == index ? 'active' : ''}}"
+          data-index="{{index}}"
+          bindtap="chooseOption"
+        >
+          {{item}}
+        </view>
+      </block>
     </view>
-  </block>
-</view>
 
-  <view class="section">
-    <text class="section-title">理解题</text>
-    <text class="question">{{currentVideo.question.text}}</text>
+    <button bindtap="submitAnswer">提交答案</button>
 
-    <block wx:for="{{currentVideo.question.options}}" wx:key="index">
-      <view 
-        class="option {{selectedIndex == index ? 'active' : ''}}"
-        data-index="{{index}}"
-        bindtap="chooseOption"
-      >
-        {{item}}
-      </view>
-    </block>
+    <text class="result">{{resultText}}</text>
   </view>
-
-  <button bindtap="submitAnswer">提交答案</button>
-
-  <text class="result">{{resultText}}</text>
 </view>

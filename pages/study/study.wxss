@@ -161,3 +161,35 @@
   font-size: 24rpx;
   color: #999;
 }
+
+.video-hint {
+  padding: 20rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.video-hint-text {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.question-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.fade-in {
+  animation: fadeInUp 360ms ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

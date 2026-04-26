@@ -6,7 +6,8 @@ Page({
     currentIndex: 0,
     selectedIndex: -1,
     resultText: '',
-    showChineseHint: false
+    showChineseHint: false,
+    showQuestion: false
   },
 
   onLoad(options) {
@@ -17,8 +18,41 @@ Page({
       currentVideo: videos[index],
       selectedIndex: -1,
       resultText: '',
-      showChineseHint: false
+      showChineseHint: false,
+      showQuestion: false
     })
+  },
+
+  onReady() {
+    this.videoContext = wx.createVideoContext('mainVideo', this)
+    this.tryAutoPlay()
+  },
+
+  onShow() {
+    this.tryAutoPlay()
+  },
+
+  tryAutoPlay() {
+    setTimeout(() => {
+      try {
+        if (!this.videoContext) {
+          this.videoContext = wx.createVideoContext('mainVideo', this)
+        }
+        if (this.videoContext && typeof this.videoContext.play === 'function') {
+          this.videoContext.play()
+        }
+      } catch (err) {
+        // 自动播放失败时静默处理，用户仍可手动点击播放
+      }
+    }, 300)
+  },
+
+  onVideoEnded() {
+    if (!this.data.showQuestion) {
+      this.setData({
+        showQuestion: true
+      })
+    }
   },
 
   toggleChineseHint() {
