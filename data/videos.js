@@ -8,6 +8,7 @@ const videos = [
     sceneName: "点餐场景",
     level: "A2",
     videoOrientation: "landscape",
+    videoFileID: "cloud://cloud1-d7ggr3wm24f29c9c2.636c-cloud1-d7ggr3wm24f29c9c2-1426183876/videos/coffee-01.mp4",
     videoUrl: "http://127.0.0.1:8080/coffee-01.mp4",
     subtitle: "I'd like a tall white chocolate mocha. Hot, please. And then may I have the banana nut bread? Yes, warmed up, please. Thank you.",
     subtitleLines: [
@@ -52,6 +53,7 @@ const videos = [
     sceneName: "机场值机",
     level: "A2",
     videoOrientation: "portrait",
+    videoFileID: "cloud://cloud1-d7ggr3wm24f29c9c2.636c-cloud1-d7ggr3wm24f29c9c2-1426183876/videos/airport-01.mp4",
     videoUrl: "http://127.0.0.1:8080/airport-01.mp4",
     subtitle: "Do you have any check-in luggage? No, just one carry-on bag. Okay, here's your boarding pass. Your boarding time is at 2:15 p.m. And your gate number is T27.",
     subtitleLines: [

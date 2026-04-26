@@ -2,8 +2,10 @@
 
   <!-- 动画层：切换时整体淡入淡出；panels 不参与动画 -->
   <view class="slide-content {{slideAnimClass}}">
-    <!-- 视频层 -->
+
+    <!-- 视频层：wx:if 确保切换时彻底销毁旧组件，避免旧尾帧被新比例拉伸 -->
     <video
+      wx:if="{{videoVisible}}"
       id="mainVideo"
       class="video-player {{currentVideo.videoOrientation === 'portrait' ? 'video-player-portrait' : 'video-player-landscape'}}"
       src="{{currentVideo.videoUrl}}"
@@ -15,7 +17,13 @@
       autoplay="{{true}}"
       object-fit="contain"
       bindended="onVideoEnded"
+      bindplay="onVideoPlay"
+      bindcanplay="onVideoCanPlay"
+      bindloadedmetadata="onVideoLoaded"
     ></video>
+
+    <!-- 切换过渡遮罩：switchMaskFading=true 时渐入，false 时渐出 -->
+    <view class="switch-mask {{switchMaskFading ? 'switch-mask-active' : ''}}"></view>
 
     <!-- 视频点击区域（暂停/播放） -->
     <view class="video-tap-area" bindtap="toggleVideoPlay">

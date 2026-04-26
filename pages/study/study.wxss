@@ -63,6 +63,22 @@ page {
   /* 视觉上仅作占位标识，避免误删；实际尺寸由父级 100% 控制 */
 }
 
+/* 切换过渡遮罩：始终在 DOM 中，双向 opacity 过渡，防旧帧抽搐 */
+.switch-mask {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.55));
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+/* 遮罩激活态：渐入到 0.65，不完全纯黑，保留画面层次感 */
+.switch-mask-active {
+  opacity: 0.65;
+}
+
 /* 视频点击区（暂停/播放） */
 .video-tap-area {
   position: absolute;

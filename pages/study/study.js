@@ -16,15 +16,22 @@ Page({
     isSwitching: false,
     switchDirection: '',
     switchPhase: '',
-    slideAnimClass: ''
+    slideAnimClass: '',
+    isVideoLoading: false,
+    videoVisible: true,
+    videoRenderKey: 0,
+    switchMaskVisible: false,
+    switchMaskFading: false
   },
 
   onLoad(options) {
     const index = Number(options.index || 0)
+    const rawVideo = videos[index]
 
+    // 先用原始数据渲染，保证 UI 立即可见（遮罩默认关闭，视频直接可见）
     this.setData({
       currentIndex: index,
-      currentVideo: videos[index],
+      currentVideo: rawVideo,
       selectedIndex: -1,
       resultText: '',
       showChineseHint: false,
@@ -32,7 +39,62 @@ Page({
       showQuestionDrawer: false,
       subtitleVisible: false,
       glossaryVisible: false,
-      isPlaying: true
+      isPlaying: true,
+      switchMaskVisible: false
+    })
+
+    // 一次性批量解析所有云端 URL，完成后更新当前视频
+    this.resolveAllVideoUrls(() => {
+      const resolvedVideo = this._resolvedVideos[index]
+      console.log('[EnglishLink] switching to index:', index,
+        'videoUrl:', resolvedVideo.videoUrl,
+        'orientation:', resolvedVideo.videoOrientation)
+      this.setData({ currentVideo: resolvedVideo })
+    })
+  },
+
+  // 一次性批量解析所有有 videoFileID 的视频，结果缓存到 this._resolvedVideos
+  resolveAllVideoUrls(callback) {
+    const fileIDs = videos
+      .filter(v => v.videoFileID)
+      .map(v => v.videoFileID)
+
+    if (fileIDs.length === 0) {
+      this._resolvedVideos = videos.slice()
+      callback()
+      return
+    }
+
+    wx.cloud.getTempFileURL({
+      fileList: fileIDs,
+      success: res => {
+        // fileID -> tempFileURL 映射
+        const urlMap = {}
+        if (res.fileList) {
+          res.fileList.forEach(item => {
+            if (item.tempFileURL) urlMap[item.fileID] = item.tempFileURL
+          })
+        }
+
+        // 把解析结果写入对应视频，没解析到的保留原 videoUrl
+        this._resolvedVideos = videos.map(v => {
+          if (v.videoFileID && urlMap[v.videoFileID]) {
+            return { ...v, videoUrl: urlMap[v.videoFileID] }
+          }
+          return v
+        })
+
+        console.log('[EnglishLink] resolved videos:', this._resolvedVideos.map(v => ({
+          title: v.title,
+          videoUrl: v.videoUrl ? v.videoUrl.substring(0, 60) + '...' : 'none'
+        })))
+        callback()
+      },
+      fail: err => {
+        console.log('[EnglishLink] resolveAllVideoUrls fail, fallback to original URLs:', err)
+        this._resolvedVideos = videos.slice()
+        callback()
+      }
     })
   },
 
@@ -68,6 +130,19 @@ Page({
         // 自动播放失败时静默处理，用户仍可手动点击播放
       }
     }, 300)
+  },
+
+  onVideoPlay() {
+    // 视频开始播放：启动遮罩淡出（CSS 180ms 过渡）
+    this.setData({ isVideoLoading: false, switchMaskFading: false, switchMaskVisible: false })
+  },
+
+  onVideoCanPlay() {
+    this.setData({ isVideoLoading: false, switchMaskFading: false, switchMaskVisible: false })
+  },
+
+  onVideoLoaded() {
+    this.setData({ isVideoLoading: false, switchMaskFading: false, switchMaskVisible: false })
   },
 
   toggleVideoPlay() {
@@ -129,21 +204,15 @@ Page({
   },
 
   openGlossary() {
-    this.setData({
-      glossaryVisible: true
-    })
+    this.setData({ glossaryVisible: true })
   },
 
   closeGlossary() {
-    this.setData({
-      glossaryVisible: false
-    })
+    this.setData({ glossaryVisible: false })
   },
 
   openQuestionDrawer() {
-    if (this.data.showQuestionDrawer) {
-      return
-    }
+    if (this.data.showQuestionDrawer) return
     this.pauseVideoSafely()
     this.setData({
       videoEnded: true,
@@ -154,9 +223,7 @@ Page({
   },
 
   closeQuestionDrawer() {
-    this.setData({
-      showQuestionDrawer: false
-    })
+    this.setData({ showQuestionDrawer: false })
   },
 
   onTouchStart(e) {
@@ -177,40 +244,72 @@ Page({
     const outClass = direction === 'next' ? 'switching-next-out' : 'switching-prev-out'
     const inClass  = direction === 'next' ? 'switching-next-in'  : 'switching-prev-in'
 
+    // 切换前先暂停当前视频，避免两条视频同时出声
+    this.pauseVideoSafely()
+
     // 第一阶段：淡出（200ms）
     this.setData({ isSwitching: true, slideAnimClass: outClass })
 
     setTimeout(() => {
-      // 切换内容 + 开始淡入
+      // 第二阶段：销毁旧 video，遮罩保持透明（背景黑色填充）
       this.videoContext = null
       this.setData({
-        currentIndex: newIndex,
-        currentVideo: videos[newIndex],
-        selectedIndex: -1,
-        resultText: '',
-        showChineseHint: false,
-        videoEnded: false,
-        showQuestionDrawer: false,
-        subtitleVisible: false,
-        glossaryVisible: false,
-        isPlaying: true,
-        slideAnimClass: inClass
+        videoVisible: false,
+        switchMaskVisible: true,
+        switchMaskFading: false  // 先保持 opacity:0，下一帧再触发渐入
       })
 
-      // 播放新视频（等渲染稳定后）
+      // 20ms 后：触发遮罩渐入（CSS 180ms ease：0 → 0.65）
       setTimeout(() => {
-        try {
-          const ctx = this.ensureVideoContext()
-          if (ctx && typeof ctx.play === 'function') ctx.play()
-        } catch (err) {
-          // 静默处理
-        }
-      }, 80)
+        this.setData({ switchMaskFading: true })
+      }, 20)
 
-      // 淡入完成后清除动画状态（220ms 对应 CSS transition 时长）
+      // 30ms 后：更新数据 + 重建新 video 组件
       setTimeout(() => {
-        this.setData({ isSwitching: false, slideAnimClass: '' })
-      }, 240)
+        const newVideo = (this._resolvedVideos && this._resolvedVideos[newIndex])
+          || videos[newIndex]
+
+        console.log('[EnglishLink] switching to index:', newIndex,
+          'videoUrl:', newVideo.videoUrl,
+          'orientation:', newVideo.videoOrientation)
+
+        // 所有字段同时写入，title / url / orientation 不可能错位
+        this.setData({
+          currentIndex: newIndex,
+          currentVideo: newVideo,
+          selectedIndex: -1,
+          resultText: '',
+          showChineseHint: false,
+          videoEnded: false,
+          showQuestionDrawer: false,
+          subtitleVisible: false,
+          glossaryVisible: false,
+          isPlaying: true,
+          videoRenderKey: this.data.videoRenderKey + 1,
+          videoVisible: true,
+          slideAnimClass: inClass
+        })
+
+        // 80ms 后：新 video 组件稳定，创建 context 并播放
+        setTimeout(() => {
+          try {
+            const ctx = this.ensureVideoContext()
+            if (ctx && typeof ctx.play === 'function') ctx.play()
+          } catch (err) {
+            // 静默处理
+          }
+        }, 80)
+
+        // 淡入动画完成后清除切换状态
+        setTimeout(() => {
+          this.setData({ isSwitching: false, slideAnimClass: '' })
+        }, 240)
+
+        // 兜底 260ms：无论事件是否触发，强制启动遮罩淡出
+        setTimeout(() => {
+          this.setData({ switchMaskFading: false, switchMaskVisible: false })
+        }, 260)
+      }, 30)
     }, 200)
   },
 
@@ -265,54 +364,36 @@ Page({
 
   chooseOption(e) {
     const index = e.currentTarget.dataset.index
-
-    this.setData({
-      selectedIndex: index
-    })
+    this.setData({ selectedIndex: index })
   },
 
   submitAnswer() {
     const { selectedIndex, currentVideo, currentIndex } = this.data
 
     if (selectedIndex === -1) {
-      wx.showToast({
-        title: '请先选择一个答案',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请先选择一个答案', icon: 'none' })
       return
     }
 
     const isCorrect = Number(selectedIndex) === currentVideo.question.answerIndex
 
     const history = wx.getStorageSync('studyHistory') || []
-
-    const newRecord = {
+    history.unshift({
       videoId: currentVideo.id,
       title: currentVideo.title,
       question: currentVideo.question,
       isCorrect: isCorrect,
       time: new Date().toLocaleString()
-    }
-
-    history.unshift(newRecord)
+    })
     wx.setStorageSync('studyHistory', history)
 
-    const stats = wx.getStorageSync('studyStats') || {
-      total: 0,
-      correct: 0
-    }
-
+    const stats = wx.getStorageSync('studyStats') || { total: 0, correct: 0 }
     stats.total += 1
-
-    if (isCorrect) {
-      stats.correct += 1
-    }
-
+    if (isCorrect) stats.correct += 1
     wx.setStorageSync('studyStats', stats)
 
     const nextIndex = currentIndex + 1
     const hasNext = nextIndex < videos.length
-
     wx.setStorageSync('studyProgress', {
       nextIndex: hasNext ? nextIndex : 0,
       completedAll: !hasNext
