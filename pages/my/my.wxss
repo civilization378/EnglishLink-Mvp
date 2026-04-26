@@ -1,19 +1,43 @@
+/* ============================================================
+ * Warm Liquid Glass · 晨光玻璃 · My / 学习档案
+ * Cream paper base · sage accents for progress · soft coral for risk.
+ * Translucent glass cards floating over softly-lit cream paper.
+ * ============================================================ */
+
 page {
-  background: #020617;
+  background: #F7F1E8;
+  background: var(--bg-page, #F7F1E8);
 }
 
-/* ============ 根容器 ============ */
+/* ============ Root ============ */
 .my-page {
+  position: relative;
   min-height: 100vh;
-  background: #020617;
+  background: #F7F1E8;
+  background:
+    radial-gradient(circle at 8% 6%, rgba(217, 154, 43, 0.06) 0%, rgba(217, 154, 43, 0) 40%),
+    radial-gradient(circle at 94% 94%, rgba(127, 165, 138, 0.05) 0%, rgba(127, 165, 138, 0) 42%),
+    var(--bg-page, #F7F1E8);
   padding-bottom: calc(env(safe-area-inset-bottom) + 56rpx);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 24rpx;
+  overflow: hidden;
+  animation: pageFadeIn 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageFadeIn 280ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* ============ 顶部栏 ============ */
+/* Lift content above ambient decoration */
+.my-page > .top-bar,
+.my-page > .hero-card,
+.my-page > .stats-row,
+.my-page > .history-card {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============ Top bar ============ */
 .top-bar {
   display: flex;
   align-items: center;
@@ -22,24 +46,37 @@ page {
 }
 
 .back-btn {
+  position: relative;
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.70);
-  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 249, 239, 0.78);
+  background: var(--glass-bg, rgba(255, 249, 239, 0.78));
+  border: 1rpx solid rgba(255, 255, 255, 0.72);
+  border: 1rpx solid var(--glass-border, rgba(255, 255, 255, 0.72));
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  backdrop-filter: blur(14rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(14rpx) saturate(1.05);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.65),
+    0 6rpx 18rpx rgba(88, 61, 32, 0.07);
+  transition:
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .back-btn:active {
-  opacity: 0.65;
+  opacity: 0.78;
+  background: #F1E6D6;
+  background: var(--bg-surface-2, #F1E6D6);
 }
 
 .back-icon {
   font-size: 44rpx;
-  color: #FFFFFF;
+  color: #3E3328;
+  color: var(--text-main, #3E3328);
   line-height: 1;
   margin-top: -4rpx;
   font-weight: 300;
@@ -48,7 +85,8 @@ page {
 .top-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #F8FAFC;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   letter-spacing: 0.5rpx;
 }
 
@@ -56,17 +94,43 @@ page {
   width: 64rpx;
 }
 
-/* ============ Hero 档案卡片 ============ */
+/* ============ Hero card — cream glass ============ */
 .hero-card {
+  position: relative;
   margin: 0 32rpx;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
-  border-radius: 32rpx;
+  background: rgba(255, 249, 239, 0.88);
+  background: var(--glass-bg-strong, rgba(255, 249, 239, 0.88));
+  border: 1rpx solid rgba(255, 255, 255, 0.72);
+  border: 1rpx solid var(--glass-border, rgba(255, 255, 255, 0.72));
+  border-radius: 28rpx;
+  border-radius: var(--radius-card, 28rpx);
   padding: 32rpx;
   display: flex;
   flex-direction: column;
   gap: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 18rpx 60rpx rgba(88, 61, 32, 0.10);
+  box-shadow: var(--shadow-glass, 0 18rpx 60rpx rgba(88, 61, 32, 0.10));
+  backdrop-filter: blur(18rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(18rpx) saturate(1.05);
   animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fadeSlideUp 320ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .hero-card-top {
@@ -79,43 +143,83 @@ page {
 .hero-card-title {
   font-size: 32rpx;
   font-weight: 700;
-  color: #F8FAFC;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   letter-spacing: 0.3rpx;
   flex: 1;
 }
 
+/* 与首页 glass-pill--brand 对齐：白色顶光 + 暖金底色 + 柔和阴影 */
 .level-badge {
+  position: relative;
   flex-shrink: 0;
-  padding: 6rpx 18rpx;
-  background: rgba(37, 99, 235, 0.20);
-  border: 1rpx solid rgba(96, 165, 250, 0.38);
+  padding: 8rpx 20rpx;
   border-radius: 999rpx;
+  background:
+    radial-gradient(circle at 30% 0%,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0) 60%),
+    rgba(217, 154, 43, 0.16);
+  border: 1rpx solid rgba(217, 154, 43, 0.35);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.78),
+    0 4rpx 12rpx rgba(88, 61, 32, 0.06);
+  backdrop-filter: blur(10rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(10rpx) saturate(1.05);
 }
 
 .level-badge-text {
   font-size: 20rpx;
-  color: #BFDBFE;
-  font-weight: 500;
-  letter-spacing: 0.5rpx;
+  color: #B97818;
+  color: var(--primary-press, #B97818);
+  font-weight: 700;
+  letter-spacing: 1rpx;
 }
 
 .hero-card-subtitle {
   font-size: 24rpx;
-  color: #94A3B8;
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
   line-height: 1.55;
   letter-spacing: 0.3rpx;
 }
 
-/* ============ 学习统计 ============ */
+/* ============ Stats — light glass strip ============ */
 .stats-row {
+  position: relative;
   margin: 0 32rpx;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 249, 239, 0.72);
+  background: var(--glass-bg, rgba(255, 249, 239, 0.72));
+  border: 1rpx solid rgba(255, 255, 255, 0.68);
+  border: 1rpx solid var(--glass-border, rgba(255, 255, 255, 0.68));
   border-radius: 28rpx;
+  border-radius: var(--radius-card, 28rpx);
   display: flex;
   align-items: center;
   padding: 30rpx 0;
+  overflow: hidden;
+  box-shadow: 0 10rpx 34rpx rgba(88, 61, 32, 0.07);
+  box-shadow: var(--shadow-soft, 0 10rpx 34rpx rgba(88, 61, 32, 0.07));
+  backdrop-filter: blur(14rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(14rpx) saturate(1.05);
   animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+  animation: fadeSlideUp 340ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 60ms both;
+}
+
+.stats-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .stat-card {
@@ -129,45 +233,83 @@ page {
 .stat-divider {
   width: 1rpx;
   height: 56rpx;
-  background: rgba(148, 163, 184, 0.14);
+  background: linear-gradient(
+    180deg,
+    rgba(80, 60, 40, 0) 0%,
+    rgba(80, 60, 40, 0.16) 50%,
+    rgba(80, 60, 40, 0) 100%
+  );
   flex-shrink: 0;
 }
 
 .stat-num {
   font-size: 42rpx;
   font-weight: 700;
-  color: #F8FAFC;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   letter-spacing: 0.3rpx;
   line-height: 1.2;
 }
 
 .stat-label {
   font-size: 22rpx;
-  color: #94A3B8;
+  color: #A99B8C;
+  color: var(--text-faint, #A99B8C);
   letter-spacing: 0.5rpx;
 }
 
-/* ============ 历史记录卡片 ============ */
+/* Sage only when learner has data — applied via conditional class in wxml */
+.stat-num--sage {
+  color: #4FAE78;
+  color: var(--correct, #4FAE78);
+}
+
+/* ============ History card — cream glass with airy separators ============ */
 .history-card {
+  position: relative;
   margin: 0 32rpx;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1rpx solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 249, 239, 0.82);
+  background: var(--glass-bg-strong, rgba(255, 249, 239, 0.82));
+  border: 1rpx solid rgba(255, 255, 255, 0.68);
+  border: 1rpx solid var(--glass-border, rgba(255, 255, 255, 0.68));
   border-radius: 28rpx;
+  border-radius: var(--radius-card, 28rpx);
   padding: 30rpx 32rpx;
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 14rpx 44rpx rgba(88, 61, 32, 0.08);
+  backdrop-filter: blur(16rpx) saturate(1.05);
+  -webkit-backdrop-filter: blur(16rpx) saturate(1.05);
   animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
+  animation: fadeSlideUp 340ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 110ms both;
+}
+
+.history-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.82) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .card-section-title {
   font-size: 26rpx;
-  font-weight: 600;
-  color: #F8FAFC;
+  font-weight: 700;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   letter-spacing: 0.5rpx;
 }
 
-/* 历史记录列表 */
 .history-list {
   display: flex;
   flex-direction: column;
@@ -181,7 +323,24 @@ page {
 }
 
 .record-item-sep {
-  border-bottom: 1rpx solid rgba(148, 163, 184, 0.10);
+  position: relative;
+}
+
+.record-item-sep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(80, 60, 40, 0) 0%,
+    rgba(80, 60, 40, 0.10) 18%,
+    rgba(80, 60, 40, 0.10) 82%,
+    rgba(80, 60, 40, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .record-header {
@@ -194,8 +353,9 @@ page {
 .record-title {
   flex: 1;
   font-size: 28rpx;
-  font-weight: 500;
-  color: #F8FAFC;
+  font-weight: 600;
+  color: #2A2118;
+  color: var(--text-strong, #2A2118);
   line-height: 1.45;
   letter-spacing: 0.3rpx;
 }
@@ -207,43 +367,47 @@ page {
 }
 
 .badge-correct {
-  background: rgba(16, 185, 129, 0.16);
-  border: 1rpx solid rgba(52, 211, 153, 0.40);
+  background: rgba(127, 165, 138, 0.14);
+  border: 1rpx solid rgba(127, 165, 138, 0.40);
 }
 
 .badge-wrong {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1rpx solid rgba(248, 113, 113, 0.32);
+  background: rgba(217, 108, 95, 0.10);
+  border: 1rpx solid rgba(217, 108, 95, 0.32);
 }
 
 .result-badge-text {
   font-size: 20rpx;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.3rpx;
 }
 
 .badge-correct .result-badge-text {
-  color: #34D399;
+  color: #4FAE78;
+  color: var(--correct, #4FAE78);
 }
 
 .badge-wrong .result-badge-text {
-  color: #F87171;
+  color: #D96C5F;
+  color: var(--wrong, #D96C5F);
 }
 
 .record-question {
   font-size: 24rpx;
-  color: #94A3B8;
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
   line-height: 1.55;
   letter-spacing: 0.2rpx;
 }
 
 .record-time {
   font-size: 22rpx;
-  color: rgba(148, 163, 184, 0.55);
+  color: #A99B8C;
+  color: var(--text-faint, #A99B8C);
   letter-spacing: 0.2rpx;
 }
 
-/* 空状态 */
+/* ============ Empty state ============ */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -253,18 +417,20 @@ page {
 
 .empty-title {
   font-size: 28rpx;
-  color: #94A3B8;
+  color: #7C6F62;
+  color: var(--text-mute, #7C6F62);
   font-weight: 500;
 }
 
 .empty-desc {
   font-size: 24rpx;
-  color: rgba(148, 163, 184, 0.60);
+  color: #A99B8C;
+  color: var(--text-faint, #A99B8C);
   line-height: 1.6;
   letter-spacing: 0.2rpx;
 }
 
-/* 清空按钮 */
+/* ============ Clear button (de-emphasized danger) ============ */
 .clear-row {
   display: flex;
   justify-content: flex-start;
@@ -273,25 +439,33 @@ page {
 
 .clear-btn {
   padding: 14rpx 28rpx;
-  border: 1rpx solid rgba(239, 68, 68, 0.35);
+  border: 1rpx solid rgba(217, 108, 95, 0.32);
   border-radius: 999rpx;
-  background: rgba(239, 68, 68, 0.06);
-  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1), background 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  background: rgba(217, 108, 95, 0.06);
+  transition:
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .clear-btn:active {
-  opacity: 0.70;
-  background: rgba(239, 68, 68, 0.12);
+  opacity: 0.78;
+  background: rgba(217, 108, 95, 0.12);
 }
 
 .clear-btn-text {
   font-size: 24rpx;
-  color: rgba(239, 68, 68, 0.80);
+  color: #D96C5F;
+  color: var(--wrong, #D96C5F);
   letter-spacing: 0.5rpx;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* ============ 关键帧 ============ */
+/* ============ Keyframes ============ */
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 @keyframes fadeSlideUp {
   from {
     opacity: 0;

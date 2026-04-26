@@ -36,10 +36,10 @@ Page({
 
   clearStudyData() {
     wx.showModal({
-      title: '确认清空？',
-      content: '清空后，学习次数、答对次数和历史记录都会被删除。',
-      confirmText: '清空',
-      confirmColor: '#ef4444',
+      title: '清空学习记录？',
+      content: '清空后，已学习次数、答题记录和正确率会重置，且无法恢复。',
+      confirmText: '仍然清空',
+      confirmColor: '#D96C5F',
       cancelText: '取消',
       success: (res) => {
         if (res.confirm) {

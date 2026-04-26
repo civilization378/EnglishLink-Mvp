@@ -1,5 +1,9 @@
 <view class="my-page">
 
+  <!-- 晨光环境光斑：仅装饰，不参与交互 -->
+  <view class="ambient ambient-gold"></view>
+  <view class="ambient ambient-sage"></view>
+
   <!-- 顶部栏 -->
   <view class="top-bar">
     <view class="back-btn" bindtap="goBack">
@@ -33,7 +37,7 @@
     </view>
     <view class="stat-divider"></view>
     <view class="stat-card">
-      <text class="stat-num">{{total > 0 ? accuracy + '%' : '--'}}</text>
+      <text class="stat-num {{total > 0 && accuracy >= 80 ? 'stat-num--sage' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
       <text class="stat-label">正确率</text>
     </view>
   </view>
@@ -71,7 +75,7 @@
     <block wx:else>
       <view class="empty-state">
         <text class="empty-title">还没有学习记录</text>
-        <text class="empty-desc">开始完成一次真实场景训练后，这里会自动记录</text>
+        <text class="empty-desc">完成一次真实场景训练后，这里会自动记录你的进度</text>
       </view>
     </block>
   </view>
