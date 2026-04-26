@@ -25,7 +25,9 @@ Page({
     answerSubmitted: false,
     isCorrect: false,
     answerFeedbackText: '',
-    answerExplanation: ''
+    answerExplanation: '',
+    questionDrawerClosing: false,
+    glossaryClosing: false
   },
 
   onLoad(options) {
@@ -48,7 +50,9 @@ Page({
       answerSubmitted: false,
       isCorrect: false,
       answerFeedbackText: '',
-      answerExplanation: ''
+      answerExplanation: '',
+      questionDrawerClosing: false,
+      glossaryClosing: false
     })
 
     // 一次性批量解析所有云端 URL，完成后更新当前视频
@@ -216,7 +220,10 @@ Page({
   },
 
   closeGlossary() {
-    this.setData({ glossaryVisible: false })
+    this.setData({ glossaryClosing: true })
+    setTimeout(() => {
+      this.setData({ glossaryVisible: false, glossaryClosing: false })
+    }, 260)
   },
 
   openQuestionDrawer() {
@@ -231,7 +238,10 @@ Page({
   },
 
   closeQuestionDrawer() {
-    this.setData({ showQuestionDrawer: false })
+    this.setData({ questionDrawerClosing: true })
+    setTimeout(() => {
+      this.setData({ showQuestionDrawer: false, questionDrawerClosing: false })
+    }, 260)
   },
 
   onTouchStart(e) {
@@ -299,7 +309,9 @@ Page({
           answerSubmitted: false,
           isCorrect: false,
           answerFeedbackText: '',
-          answerExplanation: ''
+          answerExplanation: '',
+          questionDrawerClosing: false,
+          glossaryClosing: false
         })
 
         // 80ms 后：新 video 组件稳定，创建 context 并播放

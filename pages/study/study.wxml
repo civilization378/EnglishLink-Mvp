@@ -86,8 +86,8 @@
   </view>
 
   <!-- 词汇底部抽屉（不参与切换动画） -->
-  <view wx:if="{{glossaryVisible}}" class="panel-backdrop" bindtap="closeGlossary"></view>
-  <view wx:if="{{glossaryVisible}}" class="panel glossary-panel">
+  <view wx:if="{{glossaryVisible || glossaryClosing}}" class="panel-backdrop {{glossaryClosing ? 'backdrop-closing' : ''}}" bindtap="closeGlossary"></view>
+  <view wx:if="{{glossaryVisible || glossaryClosing}}" class="panel glossary-panel {{glossaryClosing ? 'panel-closing' : ''}}">
     <view class="panel-handle"></view>
     <view class="panel-header">
       <text class="panel-title">词汇释义</text>
@@ -112,8 +112,8 @@
   </view>
 
   <!-- 答题底部抽屉（不参与切换动画） -->
-  <view wx:if="{{showQuestionDrawer}}" class="panel-backdrop" bindtap="closeQuestionDrawer"></view>
-  <view wx:if="{{showQuestionDrawer}}" class="panel question-panel">
+  <view wx:if="{{showQuestionDrawer || questionDrawerClosing}}" class="panel-backdrop {{questionDrawerClosing ? 'backdrop-closing' : ''}}" bindtap="closeQuestionDrawer"></view>
+  <view wx:if="{{showQuestionDrawer || questionDrawerClosing}}" class="panel question-panel {{questionDrawerClosing ? 'panel-closing' : ''}}">
     <view class="panel-handle"></view>
     <view class="panel-header">
       <text class="panel-title {{answerSubmitted ? (isCorrect ? 'result-title-correct' : 'result-title-wrong') : ''}}">
