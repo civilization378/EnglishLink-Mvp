@@ -93,7 +93,7 @@ page {
 .content-layer {
   position: relative;
   z-index: 10;
-  padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
+  padding: calc(env(safe-area-inset-top) + 160rpx) 32rpx calc(env(safe-area-inset-bottom) + 24rpx);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
