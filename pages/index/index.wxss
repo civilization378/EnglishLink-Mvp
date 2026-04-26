@@ -21,7 +21,7 @@ page {
   animation: pageFadeIn 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* ============ 远景层：照片 + 纵深 + vignette ============ */
+/* ============ 第一层：wallpaper layer（仅壁纸） ============ */
 .wallpaper {
   position: absolute;
   top: 0;
@@ -43,6 +43,17 @@ page {
   width: 100%;
   height: 100%;
   filter: brightness(0.72) saturate(1.05) contrast(1.04);
+}
+
+/* ============ 第二层：depth overlay layer（可读性保护） ============ */
+.depth-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* 大气纵深：顶部 ambient 暖光（模拟天空进光） + 底部暗场（模拟林下） */
@@ -78,7 +89,7 @@ page {
       rgba(0, 0, 0, 0.32) 100%);
 }
 
-/* ============ 中景：内容层 ============ */
+/* ============ 第三层：content layer ============ */
 .content-layer {
   position: relative;
   z-index: 10;

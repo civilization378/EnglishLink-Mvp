@@ -1,17 +1,21 @@
 <view class="index-page">
 
-  <!-- ===== 远景：照片 + 系统级图像处理 + 大气纵深 + vignette ===== -->
+  <!-- ===== 第一层：wallpaper layer（仅壁纸） ===== -->
   <view class="wallpaper">
     <image
       class="wallpaper-photo"
       src="/assets/images/home-forest-bg.png"
       mode="aspectFill"
     />
+  </view>
+
+  <!-- ===== 第二层：depth overlay layer（可读性保护） ===== -->
+  <view class="depth-overlay">
     <view class="wallpaper-depth"></view>
     <view class="wallpaper-vignette"></view>
   </view>
 
-  <!-- ===== 中景：内容层 ===== -->
+  <!-- ===== 第三层：content layer ===== -->
   <view class="content-layer">
 
     <!-- Hero · 像系统锁屏文字一样浮在照片上 -->
