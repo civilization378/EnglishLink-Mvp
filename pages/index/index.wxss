@@ -1,8 +1,7 @@
 /* ============================================================
  * Scene Liquid Glass · 场景液态玻璃 · Home
- * 真实场景在底，玻璃控件浮在场景之上。
- * 多层暖金 / 奶油 / 鼠尾草环境光 → 玻璃卡片折射 → 控件悬浮。
- * 不用一张图片，用 CSS 渐变模拟「清晨窗边、咖啡馆、机场光线」。
+ * 底层：完整清晰的森林壁纸（无任何全屏蒙版）
+ * 上层：每张卡片自带玻璃材质（半透明 + backdrop-filter + 高光 + 阴影）
  * ============================================================ */
 
 page {
@@ -10,25 +9,13 @@ page {
   background: var(--bg-page, #F4ECDC);
 }
 
-/* ============ Page · 多层场景氛围背景 ============ */
+/* ============ Page · 仅作图片加载兜底，不覆盖壁纸 ============ */
 .index-page {
   position: relative;
   min-height: 100vh;
-  /* 多层场景光：右上暖金窗光 + 左下鼠尾草 + 中部奶油散光 + 底色 */
-  background:
-    radial-gradient(ellipse 760rpx 540rpx at 100% -10%,
-      rgba(231, 175, 80, 0.28) 0%,
-      rgba(231, 175, 80, 0) 60%),
-    radial-gradient(ellipse 680rpx 480rpx at -10% 96%,
-      rgba(127, 165, 138, 0.18) 0%,
-      rgba(127, 165, 138, 0) 60%),
-    radial-gradient(circle 880rpx at 50% 38%,
-      rgba(255, 247, 232, 0.55) 0%,
-      rgba(255, 247, 232, 0) 70%),
-    linear-gradient(180deg,
-      #F8F0E1 0%,
-      #F2E8D6 55%,
-      #ECDFC9 100%);
+  /* 加载兜底底色：壁纸 aspectFill 后会完全盖住这一层；只在图片加载失败时可见 */
+  background: #F4ECDC;
+  background: var(--bg-page, #F4ECDC);
   padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
   box-sizing: border-box;
   display: flex;
@@ -38,81 +25,62 @@ page {
   animation: pageFadeIn 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* 内容层始终浮在 ambient 之上 */
+/* 内容层始终浮在壁纸之上 */
 .index-page > .hero-layer,
 .index-page > .scene-card,
 .index-page > .stats-row,
 .index-page > .scene-glass-panel,
 .index-page > .profile-link {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
-/* ============ Page Ambient · 漂浮光斑 ============ */
-.page-ambient {
+/* ============ Home Wallpaper · 森林晨光壁纸层 ============ */
+.home-wallpaper-layer {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  pointer-events: none;
   z-index: 0;
   overflow: hidden;
-}
-
-.ambient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60rpx);
   pointer-events: none;
 }
 
-.ambient-orb--gold {
-  top: -120rpx;
-  right: -120rpx;
-  width: 520rpx;
-  height: 520rpx;
-  background: radial-gradient(circle,
-    rgba(231, 175, 80, 0.36) 0%,
-    rgba(231, 175, 80, 0) 70%);
-  animation: orbDriftA 18s ease-in-out infinite;
-}
-
-.ambient-orb--sage {
-  top: 48%;
-  left: -160rpx;
-  width: 480rpx;
-  height: 480rpx;
-  background: radial-gradient(circle,
-    rgba(127, 165, 138, 0.26) 0%,
-    rgba(127, 165, 138, 0) 70%);
-  animation: orbDriftB 22s ease-in-out infinite;
-}
-
-.ambient-orb--cream {
-  bottom: -200rpx;
-  right: 8%;
-  width: 560rpx;
-  height: 560rpx;
-  background: radial-gradient(circle,
-    rgba(255, 240, 215, 0.55) 0%,
-    rgba(255, 240, 215, 0) 70%);
-  animation: orbDriftA 26s ease-in-out infinite reverse;
-}
-
-/* 极轻的纹理感，让背景不空 */
-.page-grain {
+/* 壁纸图：完整清晰显示，无 blur / 无降透明 / 无饱和洗白 */
+.home-wallpaper-image {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  filter: none;
+  transform: none;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0) 35%),
-    radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 32%);
-  mix-blend-mode: screen;
-  opacity: 0.7;
+}
+
+/* ============ Forest Foreground Branch · 空间森林玻璃前景树枝层（暂时停用） ============
+ * 用于测试 iOS 空间壁纸式的前景 / 中景 / 背景层次：
+ *   z-index 0：森林背景壁纸
+ *   z-index 1：首页内容（hero / 玻璃卡片 / 统计 / 路径 / 入口）
+ *   z-index 2：前景树枝（轻悬浮在玻璃卡片之上，仅作氛围，不参与交互）
+ * 当前实测贴纸感过重、破坏首页质感，因此 WXML 中的 image 已注释，
+ * 这里同时使用 display: none 作为兜底，避免任何残留渲染。
+ * 重新启用时：取消 index.wxml 中前景 image 的注释，并移除下方 display: none。
+ */
+.forest-foreground-branch {
+  display: none;
+  position: absolute;
+  top: 150rpx;
+  right: -220rpx;
+  width: 520rpx;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.52;
+  filter: drop-shadow(0 18rpx 32rpx rgba(0, 0, 0, 0.18));
 }
 
 /* ============ Hero · 浮在背景上 ============ */
@@ -124,34 +92,41 @@ page {
   animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 40ms both;
 }
 
+/* Hero 直接坐在深色森林壁纸上：暖奶油 / 蜜色文字 + 深色 halo，不加全屏蒙版 */
 .hero-eyebrow {
   font-size: 22rpx;
-  color: #A99B8C;
-  color: var(--text-faint, #A99B8C);
+  color: #E0B872;
   letter-spacing: 8rpx;
   text-transform: uppercase;
   font-weight: 700;
+  text-shadow:
+    0 1rpx 6rpx rgba(15, 12, 8, 0.65),
+    0 1rpx 2rpx rgba(15, 12, 8, 0.5);
 }
 
 .hero-title {
   font-size: 50rpx;
   font-weight: 700;
-  color: #1F1610;
-  color: var(--text-strong, #1F1610);
+  color: #F5E9C8;
   letter-spacing: -0.2rpx;
   line-height: 1.12;
-  text-shadow: 0 1rpx 0 rgba(255, 255, 255, 0.55);
+  text-shadow:
+    0 2rpx 16rpx rgba(15, 12, 8, 0.7),
+    0 1rpx 2rpx rgba(15, 12, 8, 0.55),
+    0 0 28rpx rgba(15, 12, 8, 0.35);
 }
 
 .hero-subtitle {
   font-size: 26rpx;
-  font-weight: 400;
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+  font-weight: 500;
+  color: #CFC0A2;
   line-height: 1.55;
   letter-spacing: 0.3rpx;
   max-width: 560rpx;
   margin-top: 6rpx;
+  text-shadow:
+    0 1rpx 10rpx rgba(15, 12, 8, 0.65),
+    0 1rpx 2rpx rgba(15, 12, 8, 0.5);
 }
 
 /* ============ Scene Card · 场景玻璃封面卡 ============ */
@@ -163,30 +138,24 @@ page {
   flex-direction: column;
   gap: 20rpx;
   overflow: hidden;
-  /* 卡身：白色顶部高光 + 暖金角光 + 奶油底光 + 米白对角渐变 */
+  /* 单层奶油玻璃 + 顶部白色高光 + 右上暖金光（仅卡片内部，非全屏） */
   background:
     radial-gradient(circle at 18% -8%,
-      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.42) 0%,
       rgba(255, 255, 255, 0) 38%),
     radial-gradient(circle at 92% 22%,
-      rgba(231, 175, 80, 0.22) 0%,
+      rgba(231, 175, 80, 0.14) 0%,
       rgba(231, 175, 80, 0) 44%),
-    radial-gradient(circle at 12% 96%,
-      rgba(255, 240, 215, 0.42) 0%,
-      rgba(255, 240, 215, 0) 50%),
-    linear-gradient(135deg,
-      rgba(255, 250, 240, 0.86) 0%,
-      rgba(247, 233, 211, 0.78) 55%,
-      rgba(241, 226, 200, 0.72) 100%);
-  border: 1rpx solid rgba(255, 255, 255, 0.78);
-  /* 厚度：外阴影 + 上下内高光（玻璃边缘折光） */
+    rgba(255, 249, 239, 0.42);
+  border: 1rpx solid rgba(255, 255, 255, 0.72);
+  /* 玻璃厚度：外阴影 + 上下内高光 */
   box-shadow:
-    0 28rpx 70rpx rgba(88, 61, 32, 0.14),
-    0 6rpx 16rpx rgba(88, 61, 32, 0.06),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1rpx 0 rgba(217, 154, 43, 0.10);
-  backdrop-filter: blur(20rpx) saturate(1.1);
-  -webkit-backdrop-filter: blur(20rpx) saturate(1.1);
+    0 24rpx 70rpx rgba(30, 24, 18, 0.18),
+    0 6rpx 16rpx rgba(30, 24, 18, 0.08),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.76),
+    inset 0 -1rpx 0 rgba(80, 60, 40, 0.10);
+  backdrop-filter: blur(26rpx) saturate(1.18);
+  -webkit-backdrop-filter: blur(26rpx) saturate(1.18);
   animation: fadeSlideUp 420ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 100ms both;
 }
 
@@ -383,12 +352,12 @@ page {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  /* 暖金液态：上沿微亮 + 主体柔金 + 下沿微暗 */
+  /* 暖金液态：上沿微亮 + 主体柔金 + 下沿微暗（极轻透明，更像液体玻璃） */
   background:
     linear-gradient(180deg,
-      #E8B14C 0%,
-      #DC9F30 52%,
-      #C0851A 100%);
+      rgba(232, 177, 76, 0.96) 0%,
+      rgba(220, 159, 48, 0.94) 52%,
+      rgba(192, 133, 26, 0.92) 100%);
   box-shadow:
     inset 0 2rpx 0 rgba(255, 232, 184, 0.55),
     inset 0 -2rpx 4rpx rgba(140, 86, 14, 0.20),
@@ -480,15 +449,16 @@ page {
   overflow: hidden;
   background:
     radial-gradient(circle at 30% 0%,
-      rgba(255, 255, 255, 0.78) 0%,
+      rgba(255, 255, 255, 0.50) 0%,
       rgba(255, 255, 255, 0) 60%),
-    rgba(255, 251, 244, 0.50);
-  border: 1rpx solid rgba(255, 255, 255, 0.68);
+    rgba(255, 249, 239, 0.30);
+  border: 1rpx solid rgba(255, 255, 255, 0.62);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.85),
-    0 10rpx 26rpx rgba(88, 61, 32, 0.07);
-  backdrop-filter: blur(16rpx) saturate(1.05);
-  -webkit-backdrop-filter: blur(16rpx) saturate(1.05);
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1rpx 0 rgba(80, 60, 40, 0.08),
+    0 14rpx 30rpx rgba(30, 24, 18, 0.14);
+  backdrop-filter: blur(22rpx) saturate(1.16);
+  -webkit-backdrop-filter: blur(22rpx) saturate(1.16);
 }
 
 .glass-stat::before {
@@ -534,9 +504,8 @@ page {
 
 .glass-stat-label {
   font-size: 22rpx;
-  font-weight: 400;
-  color: #A99B8C;
-  color: var(--text-faint, #A99B8C);
+  font-weight: 500;
+  color: #6E5E4F;
   letter-spacing: 1rpx;
   margin-top: 2rpx;
 }
@@ -552,18 +521,19 @@ page {
   overflow: hidden;
   background:
     radial-gradient(circle at 0% 0%,
-      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.36) 0%,
       rgba(255, 255, 255, 0) 50%),
     radial-gradient(circle at 100% 100%,
-      rgba(217, 154, 43, 0.08) 0%,
+      rgba(217, 154, 43, 0.10) 0%,
       rgba(217, 154, 43, 0) 50%),
-    rgba(255, 250, 240, 0.42);
-  border: 1rpx solid rgba(255, 255, 255, 0.55);
+    rgba(255, 249, 239, 0.34);
+  border: 1rpx solid rgba(255, 255, 255, 0.58);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.75),
-    0 10rpx 24rpx rgba(88, 61, 32, 0.05);
-  backdrop-filter: blur(14rpx) saturate(1.02);
-  -webkit-backdrop-filter: blur(14rpx) saturate(1.02);
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.66),
+    inset 0 -1rpx 0 rgba(80, 60, 40, 0.08),
+    0 14rpx 30rpx rgba(30, 24, 18, 0.14);
+  backdrop-filter: blur(24rpx) saturate(1.18);
+  -webkit-backdrop-filter: blur(24rpx) saturate(1.18);
   animation: fadeSlideUp 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 280ms both;
 }
 
@@ -629,13 +599,13 @@ page {
   justify-content: center;
   border-radius: 999rpx;
   border-radius: var(--radius-pill, 999rpx);
-  background: rgba(255, 255, 255, 0.30);
-  border: 1rpx solid rgba(255, 255, 255, 0.50);
+  background: rgba(255, 249, 239, 0.28);
+  border: 1rpx solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.65),
-    0 4rpx 14rpx rgba(88, 61, 32, 0.04);
-  backdrop-filter: blur(8rpx);
-  -webkit-backdrop-filter: blur(8rpx);
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.60),
+    0 8rpx 22rpx rgba(30, 24, 18, 0.12);
+  backdrop-filter: blur(18rpx) saturate(1.12);
+  -webkit-backdrop-filter: blur(18rpx) saturate(1.12);
   transition:
     opacity 140ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     background 140ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
@@ -643,15 +613,15 @@ page {
 }
 
 .profile-link--press {
-  opacity: 0.7;
-  background: rgba(255, 255, 255, 0.46);
+  opacity: 0.82;
+  background: rgba(255, 249, 239, 0.44);
 }
 
 .profile-link-text {
   font-size: 24rpx;
-  color: #7C6F62;
-  color: var(--text-mute, #7C6F62);
+  color: #4A3E33;
   letter-spacing: 1.2rpx;
+  text-shadow: 0 1rpx 0 rgba(255, 255, 255, 0.5);
 }
 
 /* ============ Keyframes ============ */
@@ -674,17 +644,4 @@ page {
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-/* 极慢的 ambient 漂移：只用 transform，开销低 */
-@keyframes orbDriftA {
-  0%   { transform: translate(0, 0); }
-  50%  { transform: translate(-20rpx, 16rpx); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes orbDriftB {
-  0%   { transform: translate(0, 0); }
-  50%  { transform: translate(24rpx, -18rpx); }
-  100% { transform: translate(0, 0); }
 }

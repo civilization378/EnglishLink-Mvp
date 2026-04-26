@@ -1,11 +1,12 @@
 <view class="index-page">
 
-  <!-- 场景氛围背景层：晨光暖金 + 远处鼠尾草 + 奶油散光（不参与交互） -->
-  <view class="page-ambient">
-    <view class="ambient-orb ambient-orb--gold"></view>
-    <view class="ambient-orb ambient-orb--sage"></view>
-    <view class="ambient-orb ambient-orb--cream"></view>
-    <view class="page-grain"></view>
+  <!-- 森林雨滴壁纸层：完整清晰底图，不叠任何全屏蒙版（不参与交互） -->
+  <view class="home-wallpaper-layer">
+    <image
+      class="home-wallpaper-image"
+      src="/assets/images/home-forest-bg.png"
+      mode="aspectFill"
+    />
   </view>
 
   <!-- Hero · 浮在背景之上，不再装在卡片里 -->
@@ -115,5 +116,16 @@
   <view class="profile-link" bindtap="goMy" hover-class="profile-link--press" hover-stay-time="60">
     <text class="profile-link-text">查看我的学习档案 →</text>
   </view>
+
+  <!-- 空间森林玻璃 · 前景树枝层（已暂时停用：贴纸感过重，影响首页质感） -->
+  <!-- 如需重新启用 iOS 空间壁纸式的前景层效果，请同时取消下方注释、并移除
+       index.wxss 中 .forest-foreground-branch 的 display: none。 -->
+  <!--
+  <image
+    class="forest-foreground-branch"
+    src="/assets/images/home-forest-branch.png"
+    mode="widthFix"
+  />
+  -->
 
 </view>
