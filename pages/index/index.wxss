@@ -19,6 +19,7 @@ page {
   align-items: flex-start;
   justify-content: space-between;
   padding-bottom: 4rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-left {
@@ -49,6 +50,11 @@ page {
   background: rgba(15, 23, 42, 0.92);
   border: 1rpx solid rgba(148, 163, 184, 0.18);
   border-radius: 999rpx;
+  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.accuracy-pill:active {
+  opacity: 0.68;
 }
 
 .accuracy-label {
@@ -73,6 +79,7 @@ page {
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  animation: fadeSlideUp 360ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
 }
 
 .main-card-header {
@@ -152,10 +159,14 @@ page {
   box-shadow:
     0 12rpx 40rpx rgba(0, 0, 0, 0.50),
     inset 0 1rpx 0 rgba(255, 255, 255, 0.04);
+  transition:
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cover-area:active {
-  opacity: 0.88;
+  opacity: 0.86;
+  transform: scale(0.99);
 }
 
 .cover-glow {
@@ -200,11 +211,18 @@ page {
   align-items: center;
   justify-content: center;
   box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.32);
+  transition:
+    background 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .start-btn:active {
   background: #1D4ED8;
   box-shadow: 0 4rpx 12rpx rgba(37, 99, 235, 0.24);
+  transform: scale(0.98);
+  opacity: 0.92;
 }
 
 .start-btn-text {
@@ -222,6 +240,7 @@ page {
   display: flex;
   align-items: center;
   padding: 30rpx 0;
+  animation: fadeSlideUp 340ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
 }
 
 .stat-card {
@@ -262,6 +281,7 @@ page {
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  animation: fadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) 170ms both;
 }
 
 .goal-title {
@@ -302,20 +322,35 @@ page {
   display: flex;
   justify-content: center;
   padding-top: 4rpx;
+  animation: fadeSlideUp 280ms cubic-bezier(0.22, 1, 0.36, 1) 210ms both;
 }
 
 .ghost-btn {
   padding: 18rpx 56rpx;
   border: 1rpx solid rgba(148, 163, 184, 0.22);
   border-radius: 999rpx;
+  transition: opacity 140ms cubic-bezier(0.22, 1, 0.36, 1), background 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ghost-btn:active {
-  background: rgba(148, 163, 184, 0.08);
+  opacity: 0.62;
+  background: rgba(148, 163, 184, 0.06);
 }
 
 .ghost-btn-text {
   font-size: 26rpx;
   color: #94A3B8;
   letter-spacing: 0.5rpx;
+}
+
+/* ============ 关键帧 ============ */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
