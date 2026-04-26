@@ -116,34 +116,72 @@
   <view wx:if="{{showQuestionDrawer}}" class="panel question-panel">
     <view class="panel-handle"></view>
     <view class="panel-header">
-      <text class="panel-title">理解题</text>
+      <text class="panel-title {{answerSubmitted ? (isCorrect ? 'result-title-correct' : 'result-title-wrong') : ''}}">
+        {{answerSubmitted ? answerFeedbackText : '理解题'}}
+      </text>
       <text class="panel-tag">{{currentIndex + 1}} / {{totalVideos}}</text>
     </view>
 
-    <scroll-view class="question-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-      <text class="question-text">{{currentVideo.question.text}}</text>
+    <!-- 答题阶段 -->
+    <block wx:if="{{!answerSubmitted}}">
+      <scroll-view class="question-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+        <text class="question-text">{{currentVideo.question.text}}</text>
+        <view class="option-list">
+          <block wx:for="{{currentVideo.question.options}}" wx:key="index">
+            <view
+              class="option {{selectedIndex == index ? 'active' : ''}}"
+              data-index="{{index}}"
+              bindtap="chooseOption"
+            >
+              <text class="option-index">{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text>
+              <text class="option-text">{{item}}</text>
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+      <view class="panel-footer">
+        <button class="primary-btn" bindtap="submitAnswer">提交答案</button>
+        <view class="replay-row" bindtap="replayVideo">
+          <text class="replay-text">重播视频</text>
+        </view>
+      </view>
+    </block>
 
-      <view class="option-list">
-        <block wx:for="{{currentVideo.question.options}}" wx:key="index">
-          <view
-            class="option {{selectedIndex == index ? 'active' : ''}}"
-            data-index="{{index}}"
-            bindtap="chooseOption"
-          >
-            <text class="option-index">{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text>
-            <text class="option-text">{{item}}</text>
+    <!-- 结果阶段 -->
+    <block wx:else>
+      <scroll-view class="question-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+        <view class="feedback-panel">
+
+          <!-- 题目 -->
+          <view class="feedback-section">
+            <text class="feedback-section-label">题目</text>
+            <text class="feedback-question-text">{{currentVideo.question.text}}</text>
           </view>
-        </block>
-      </view>
-    </scroll-view>
 
-    <view class="panel-footer">
-      <button class="primary-btn" bindtap="submitAnswer">提交答案</button>
-      <view class="replay-row" bindtap="replayVideo">
-        <text class="replay-text">重播视频</text>
+          <!-- 正确答案 -->
+          <view class="feedback-section">
+            <text class="feedback-section-label">正确答案</text>
+            <view class="feedback-answer-card">
+              <view class="feedback-answer-badge"><text class="feedback-answer-badge-text">{{currentVideo.question.answerIndex === 0 ? 'A' : currentVideo.question.answerIndex === 1 ? 'B' : currentVideo.question.answerIndex === 2 ? 'C' : 'D'}}</text></view>
+              <text class="feedback-answer-text">{{currentVideo.question.options[currentVideo.question.answerIndex]}}</text>
+            </view>
+          </view>
+
+          <!-- 解释 -->
+          <view wx:if="{{answerExplanation}}" class="feedback-section">
+            <text class="feedback-section-label">解释</text>
+            <view class="feedback-explanation-card">
+              <text class="feedback-explanation-text">{{answerExplanation}}</text>
+            </view>
+          </view>
+
+        </view>
+      </scroll-view>
+      <view class="panel-footer">
+        <button class="primary-btn feedback-continue-btn {{isCorrect ? '' : 'primary-btn-next'}}" bindtap="goNextFromResult">继续下一条</button>
       </view>
-      <text wx:if="{{resultText}}" class="result">{{resultText}}</text>
-    </view>
+    </block>
+
   </view>
 
 </view>

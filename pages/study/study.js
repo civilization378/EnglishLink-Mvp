@@ -21,7 +21,11 @@ Page({
     videoVisible: true,
     videoRenderKey: 0,
     switchMaskVisible: false,
-    switchMaskFading: false
+    switchMaskFading: false,
+    answerSubmitted: false,
+    isCorrect: false,
+    answerFeedbackText: '',
+    answerExplanation: ''
   },
 
   onLoad(options) {
@@ -40,7 +44,11 @@ Page({
       subtitleVisible: false,
       glossaryVisible: false,
       isPlaying: true,
-      switchMaskVisible: false
+      switchMaskVisible: false,
+      answerSubmitted: false,
+      isCorrect: false,
+      answerFeedbackText: '',
+      answerExplanation: ''
     })
 
     // 一次性批量解析所有云端 URL，完成后更新当前视频
@@ -287,7 +295,11 @@ Page({
           isPlaying: true,
           videoRenderKey: this.data.videoRenderKey + 1,
           videoVisible: true,
-          slideAnimClass: inClass
+          slideAnimClass: inClass,
+          answerSubmitted: false,
+          isCorrect: false,
+          answerFeedbackText: '',
+          answerExplanation: ''
         })
 
         // 80ms 后：新 video 组件稳定，创建 context 并播放
@@ -382,7 +394,7 @@ Page({
       videoId: currentVideo.id,
       title: currentVideo.title,
       question: currentVideo.question,
-      isCorrect: isCorrect,
+      isCorrect,
       time: new Date().toLocaleString()
     })
     wx.setStorageSync('studyHistory', history)
@@ -399,8 +411,26 @@ Page({
       completedAll: !hasNext
     })
 
-    wx.navigateTo({
-      url: `/pages/result/result?isCorrect=${isCorrect}&question=${encodeURIComponent(currentVideo.question.text)}&explanation=${encodeURIComponent(currentVideo.question.explanation)}&nextIndex=${nextIndex}&hasNext=${hasNext}`
+    this.setData({
+      answerSubmitted: true,
+      isCorrect,
+      answerFeedbackText: isCorrect ? '回答正确' : '回答错误',
+      answerExplanation: currentVideo.question.explanation || ''
     })
+  },
+
+  goNextFromResult() {
+    this.setData({
+      answerSubmitted: false,
+      isCorrect: false,
+      answerFeedbackText: '',
+      answerExplanation: '',
+      selectedIndex: -1,
+      resultText: '',
+      showQuestionDrawer: false,
+      subtitleVisible: false,
+      glossaryVisible: false
+    })
+    this.goNextVideo()
   }
 })
