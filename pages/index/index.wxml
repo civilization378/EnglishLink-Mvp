@@ -1,113 +1,119 @@
 <view class="index-page">
 
-  <!-- 森林壁纸层：原图 aspectFill，无米白蒙版，仅一道极轻上下 vignette 托住文字 -->
+  <!-- ===== 远景：照片 + 系统级图像处理 + 大气纵深 + vignette ===== -->
   <view class="wallpaper">
     <image
-      class="wallpaper-image"
+      class="wallpaper-photo"
       src="/assets/images/home-forest-bg.png"
       mode="aspectFill"
     />
+    <view class="wallpaper-depth"></view>
     <view class="wallpaper-vignette"></view>
   </view>
 
-  <!-- Hero · 直接浮在森林壁纸上 -->
-  <view class="hero">
-    <text class="hero-eyebrow">ENGLISH LINK</text>
-    <text class="hero-title">看场景 · 懂英文</text>
-    <text class="hero-subtitle">每天 1 分钟，看真实场景，练出不用翻译的理解力</text>
-  </view>
+  <!-- ===== 中景：内容层 ===== -->
+  <view class="content-layer">
 
-  <!-- 今日场景主卡 · 暗色烟熏玻璃控件 -->
-  <view class="scene-card">
-    <view class="card-sheen"></view>
+    <!-- Hero · 像系统锁屏文字一样浮在照片上 -->
+    <view class="hero">
+      <text class="hero-eyebrow">ENGLISH LINK</text>
+      <text class="hero-title">看场景 · 懂英文</text>
+      <text class="hero-subtitle">每天 1 分钟，看真实场景，练出不用翻译的理解力</text>
+    </view>
 
-    <view class="scene-card-header">
-      <view class="pill pill--brand">
-        <text class="pill-text pill-text--brand">今日场景</text>
+    <!-- 今日场景主卡 · 液态玻璃系统控件 -->
+    <view class="scene-card">
+      <view class="card-sheen"></view>
+
+      <view class="scene-card-header">
+        <view class="pill pill--brand">
+          <text class="pill-text pill-text--brand">今日场景</text>
+        </view>
+        <view wx:if="{{!completedAll}}" class="pill pill--ghost">
+          <text class="pill-text pill-text--ghost">第 {{recommendNumber}} / {{totalVideos}} 个场景</text>
+        </view>
+        <view wx:else class="pill pill--mint">
+          <text class="pill-text pill-text--mint">本轮已完成</text>
+        </view>
       </view>
-      <view wx:if="{{!completedAll}}" class="pill pill--ghost">
-        <text class="pill-text pill-text--ghost">第 {{recommendNumber}} / {{totalVideos}} 个场景</text>
+
+      <block wx:if="{{!completedAll}}">
+        <text class="scene-title">{{todayVideo.title}}</text>
+
+        <view class="meta-row">
+          <text class="meta-text">真实场景视频</text>
+          <text class="meta-dot">·</text>
+          <text class="meta-text">1 道理解题</text>
+          <text wx:if="{{todayVideo.level}}" class="meta-dot">·</text>
+          <text wx:if="{{todayVideo.level}}" class="meta-text">{{todayVideo.level}}</text>
+        </view>
+
+        <text class="hook-text">看 15 秒，试试你能不能直接听懂这句英文。</text>
+
+        <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
+          <text class="cta-text">▶ 开始今日 1 分钟</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <text class="scene-title">本轮训练已完成</text>
+
+        <view class="meta-row">
+          <text class="meta-text">{{totalVideos}} 段场景已通关</text>
+        </view>
+
+        <text class="hook-text">把熟悉的场景再训练一遍，让英文成为本能。</text>
+
+        <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
+          <text class="cta-text">重新开始训练</text>
+        </view>
+      </block>
+    </view>
+
+    <!-- 学习统计 · 三个 iOS 风小玻璃控件 -->
+    <view class="stats-row">
+      <view class="stat-card">
+        <view class="card-sheen card-sheen--narrow"></view>
+        <text class="stat-num">{{total}}</text>
+        <text class="stat-label">已学习</text>
       </view>
-      <view wx:else class="pill pill--mint">
-        <text class="pill-text pill-text--mint">本轮已完成</text>
+      <view class="stat-card">
+        <view class="card-sheen card-sheen--narrow"></view>
+        <text class="stat-num">{{correct}}</text>
+        <text class="stat-label">答对</text>
+      </view>
+      <view class="stat-card">
+        <view class="card-sheen card-sheen--narrow"></view>
+        <text class="stat-num {{total > 0 && accuracy >= 80 ? 'stat-num--mint' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
+        <text class="stat-label">正确率</text>
       </view>
     </view>
 
-    <block wx:if="{{!completedAll}}">
-      <text class="scene-title">{{todayVideo.title}}</text>
-
-      <view class="meta-row">
-        <text class="meta-text">真实场景视频</text>
-        <text class="meta-dot">·</text>
-        <text class="meta-text">1 道理解题</text>
-        <text wx:if="{{todayVideo.level}}" class="meta-dot">·</text>
-        <text wx:if="{{todayVideo.level}}" class="meta-text">{{todayVideo.level}}</text>
-      </view>
-
-      <text class="hook-text">看 15 秒，试试你能不能直接听懂这句英文。</text>
-
-      <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
-        <text class="cta-text">▶ 开始今日 1 分钟</text>
-      </view>
-    </block>
-
-    <block wx:else>
-      <text class="scene-title">本轮训练已完成</text>
-
-      <view class="meta-row">
-        <text class="meta-text">{{totalVideos}} 段场景已通关</text>
-      </view>
-
-      <text class="hook-text">把熟悉的场景再训练一遍，让英文成为本能。</text>
-
-      <view class="cta-button" bindtap="goStudy" hover-class="cta-button--press" hover-stay-time="80">
-        <text class="cta-text">重新开始训练</text>
-      </view>
-    </block>
-  </view>
-
-  <!-- 学习统计 · 三个暗玻璃控件 -->
-  <view class="stats-row">
-    <view class="stat-card">
-      <view class="card-sheen card-sheen--narrow"></view>
-      <text class="stat-num">{{total}}</text>
-      <text class="stat-label">已学习</text>
-    </view>
-    <view class="stat-card">
-      <view class="card-sheen card-sheen--narrow"></view>
-      <text class="stat-num">{{correct}}</text>
-      <text class="stat-label">答对</text>
-    </view>
-    <view class="stat-card">
-      <view class="card-sheen card-sheen--narrow"></view>
-      <text class="stat-num {{total > 0 && accuracy >= 80 ? 'stat-num--mint' : ''}}">{{total > 0 ? accuracy + '%' : '--'}}</text>
-      <text class="stat-label">正确率</text>
-    </view>
-  </view>
-
-  <!-- 训练路径 · 弱一档暗玻璃面板 -->
-  <view class="path-panel">
-    <view class="card-sheen"></view>
-    <text class="panel-title">今天你会完成</text>
-    <view class="panel-list">
-      <view class="panel-item">
-        <text class="panel-num">01</text>
-        <text class="panel-text">看一段真实英文场景</text>
-      </view>
-      <view class="panel-item">
-        <text class="panel-num">02</text>
-        <text class="panel-text">回答一道理解题</text>
-      </view>
-      <view class="panel-item">
-        <text class="panel-num">03</text>
-        <text class="panel-text">看解释，确认自己听懂了什么</text>
+    <!-- 训练路径 · 弱一档玻璃面板 -->
+    <view class="path-panel">
+      <view class="card-sheen"></view>
+      <text class="panel-title">今天你会完成</text>
+      <view class="panel-list">
+        <view class="panel-item">
+          <text class="panel-num">01</text>
+          <text class="panel-text">看一段真实英文场景</text>
+        </view>
+        <view class="panel-item">
+          <text class="panel-num">02</text>
+          <text class="panel-text">回答一道理解题</text>
+        </view>
+        <view class="panel-item">
+          <text class="panel-num">03</text>
+          <text class="panel-text">看解释，确认自己听懂了什么</text>
+        </view>
       </view>
     </view>
-  </view>
 
-  <!-- 我的入口 · 暗玻璃文字胶囊 -->
-  <view class="profile-link" bindtap="goMy" hover-class="profile-link--press" hover-stay-time="60">
-    <text class="profile-link-text">查看我的学习档案 →</text>
+    <!-- 我的入口 · 玻璃文字胶囊 -->
+    <view class="profile-link" bindtap="goMy" hover-class="profile-link--press" hover-stay-time="60">
+      <text class="profile-link-text">查看我的学习档案 →</text>
+    </view>
+
   </view>
 
 </view>

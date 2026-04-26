@@ -1,39 +1,27 @@
 /* ============================================================
- * Forest Spatial Glass · Home
- * 深绿森林壁纸 + 浮动暗色烟熏玻璃控件
- * 设计原则：空间感 / 可读性 / 克制 / 不贴纸 / 不水滴 / 不洗白
+ * Forest Spatial Glass · Home (single-image edition)
+ * 仅使用 home-forest-bg.png 一张图，靠 CSS 模拟 iOS 空间壁纸：
+ *   照片 → 系统级处理（brightness/saturate/contrast）
+ *   + 顶部 ambient 光 + 底部暗场（大气纵深）
+ *   + 边缘 vignette（取景框 / 照片质感）
+ *   + 液态玻璃卡片（顶亮底暗的渐变玻璃 + 强 inset 高光 + 强外阴影）
+ * 不使用任何前景抠图素材，不做水滴贴纸装饰。
  * ============================================================ */
 
-/* 加载兜底：深森林色，避免冷启动闪白 */
 page {
   background: #0E1410;
 }
 
-/* ============ Page · 仅作图片加载兜底，不洗白壁纸 ============ */
+/* ============ Page · 深色兜底底色，避免冷启动闪白 ============ */
 .index-page {
   position: relative;
   min-height: 100vh;
   background: #0E1410;
-  padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 28rpx;
   overflow: hidden;
   animation: pageFadeIn 360ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
-/* 内容层永远在壁纸之上 */
-.index-page > .hero,
-.index-page > .scene-card,
-.index-page > .stats-row,
-.index-page > .path-panel,
-.index-page > .profile-link {
-  position: relative;
-  z-index: 1;
-}
-
-/* ============ Wallpaper · 森林壁纸层 ============ */
+/* ============ 远景层：照片 + 纵深 + vignette ============ */
 .wallpaper {
   position: absolute;
   top: 0;
@@ -45,8 +33,8 @@ page {
   pointer-events: none;
 }
 
-/* 壁纸图：完整清晰显示，无 blur / 无降透明 / 无饱和洗白 */
-.wallpaper-image {
+/* 照片：iOS 锁屏式系统级图像处理 —— 不洗白，但有"被处理过"的高级感 */
+.wallpaper-photo {
   position: absolute;
   top: 0;
   right: 0;
@@ -54,13 +42,29 @@ page {
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 1;
-  filter: none;
-  transform: none;
-  pointer-events: none;
+  filter: brightness(0.72) saturate(1.05) contrast(1.04);
 }
 
-/* 极轻暗色 vignette：仅用于托住 Hero 与底部 CTA 文字，不洗白原图 */
+/* 大气纵深：顶部 ambient 暖光（模拟天空进光） + 底部暗场（模拟林下） */
+.wallpaper-depth {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%,
+      rgba(255, 246, 220, 0.10) 0%,
+      rgba(255, 246, 220, 0) 60%),
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.06) 36%,
+      rgba(0, 0, 0, 0.18) 70%,
+      rgba(0, 0, 0, 0.36) 100%);
+}
+
+/* 照片级 vignette：四角自然压暗，让照片像被取景框框住 */
 .wallpaper-vignette {
   position: absolute;
   top: 0;
@@ -69,15 +73,23 @@ page {
   left: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg,
-      rgba(8, 14, 10, 0.42) 0%,
-      rgba(8, 14, 10, 0.10) 18%,
-      rgba(8, 14, 10, 0.00) 42%,
-      rgba(8, 14, 10, 0.10) 76%,
-      rgba(8, 14, 10, 0.38) 100%);
+    radial-gradient(ellipse 130% 80% at 50% 50%,
+      rgba(0, 0, 0, 0) 56%,
+      rgba(0, 0, 0, 0.32) 100%);
 }
 
-/* ============ Hero · 浮在壁纸上的暖白主标 ============ */
+/* ============ 中景：内容层 ============ */
+.content-layer {
+  position: relative;
+  z-index: 10;
+  padding: calc(env(safe-area-inset-top) + 56rpx) 32rpx calc(env(safe-area-inset-bottom) + 64rpx);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+/* ============ Hero · 像系统锁屏文字一样浮在照片上 ============ */
 .hero {
   display: flex;
   flex-direction: column;
@@ -97,24 +109,23 @@ page {
 }
 
 .hero-title {
-  font-size: 54rpx;
+  font-size: 56rpx;
   font-weight: 700;
-  color: #F7EFD9;
-  letter-spacing: -0.3rpx;
+  color: #F7F2E6;
+  letter-spacing: -0.4rpx;
   line-height: 1.14;
   text-shadow:
-    0 2rpx 18rpx rgba(0, 0, 0, 0.55),
-    0 1rpx 2rpx rgba(0, 0, 0, 0.50),
-    0 0 28rpx rgba(0, 0, 0, 0.30);
+    0 4rpx 18rpx rgba(0, 0, 0, 0.45),
+    0 1rpx 2rpx rgba(0, 0, 0, 0.50);
 }
 
 .hero-subtitle {
   font-size: 26rpx;
   font-weight: 500;
-  color: rgba(245, 239, 226, 0.78);
+  color: rgba(247, 242, 230, 0.76);
   line-height: 1.55;
   letter-spacing: 0.3rpx;
-  max-width: 560rpx;
+  max-width: 520rpx;
   margin-top: 4rpx;
   text-shadow:
     0 1rpx 8rpx rgba(0, 0, 0, 0.55),
@@ -144,7 +155,7 @@ page {
     rgba(255, 255, 255, 0) 100%);
 }
 
-/* ============ Scene Card · 主卡 暗色烟熏玻璃 ============ */
+/* ============ Scene Card · 主卡 真液态玻璃（顶亮底暗的渐变玻璃） ============ */
 .scene-card {
   position: relative;
   border-radius: 32rpx;
@@ -153,15 +164,17 @@ page {
   flex-direction: column;
   gap: 18rpx;
   overflow: hidden;
-  background: rgba(15, 20, 16, 0.42);
-  border: 1rpx solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(180deg,
+    rgba(16, 24, 18, 0.58) 0%,
+    rgba(10, 16, 12, 0.46) 100%);
+  border: 1rpx solid rgba(255, 255, 255, 0.20);
   box-shadow:
-    0 28rpx 80rpx rgba(0, 0, 0, 0.36),
-    0 6rpx 18rpx rgba(0, 0, 0, 0.22),
-    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.28),
+    0 30rpx 90rpx rgba(0, 0, 0, 0.38),
+    0 8rpx 24rpx rgba(0, 0, 0, 0.20),
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.32),
     inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(30rpx) saturate(1.25);
-  -webkit-backdrop-filter: blur(30rpx) saturate(1.25);
+  backdrop-filter: blur(30rpx) saturate(1.22);
+  -webkit-backdrop-filter: blur(30rpx) saturate(1.22);
   animation: fadeSlideUp 460ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) 100ms both;
 }
 
@@ -194,8 +207,8 @@ page {
 }
 
 .pill--brand {
-  background: rgba(217, 154, 43, 0.18);
-  border-color: rgba(232, 187, 95, 0.42);
+  background: rgba(217, 154, 43, 0.20);
+  border-color: rgba(232, 187, 95, 0.46);
 }
 
 .pill-text--brand {
@@ -204,22 +217,22 @@ page {
 
 .pill--ghost {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .pill-text--ghost {
-  color: rgba(245, 239, 226, 0.78);
+  color: rgba(248, 243, 232, 0.78);
   font-weight: 600;
   letter-spacing: 1.5rpx;
 }
 
 .pill--mint {
-  background: rgba(111, 211, 154, 0.16);
-  border-color: rgba(111, 211, 154, 0.42);
+  background: rgba(105, 217, 154, 0.16);
+  border-color: rgba(105, 217, 154, 0.44);
 }
 
 .pill-text--mint {
-  color: #8BDFB0;
+  color: #8BE3B0;
   letter-spacing: 2rpx;
 }
 
@@ -229,7 +242,7 @@ page {
   z-index: 1;
   font-size: 40rpx;
   font-weight: 700;
-  color: #F7EFD9;
+  color: #F8F3E8;
   line-height: 1.22;
   letter-spacing: 0.2rpx;
   margin-top: 4rpx;
@@ -246,26 +259,26 @@ page {
 
 .meta-text {
   font-size: 24rpx;
-  color: rgba(245, 239, 226, 0.72);
+  color: rgba(248, 243, 232, 0.72);
   letter-spacing: 0.3rpx;
 }
 
 .meta-dot {
   font-size: 24rpx;
-  color: rgba(245, 239, 226, 0.42);
+  color: rgba(248, 243, 232, 0.42);
 }
 
 .hook-text {
   position: relative;
   z-index: 1;
   font-size: 24rpx;
-  color: rgba(245, 239, 226, 0.62);
+  color: rgba(248, 243, 232, 0.62);
   line-height: 1.6;
   letter-spacing: 0.2rpx;
   padding: 4rpx 0 2rpx;
 }
 
-/* ============ CTA · 暖金主按钮（页面唯一强 CTA） ============ */
+/* ============ CTA · 暖金主按钮（首页唯一强 CTA，照片上的发光控件） ============ */
 .cta-button {
   position: relative;
   z-index: 1;
@@ -280,8 +293,8 @@ page {
   box-shadow:
     inset 0 2rpx 0 rgba(255, 232, 184, 0.55),
     inset 0 -2rpx 4rpx rgba(140, 86, 14, 0.20),
-    0 14rpx 34rpx rgba(217, 154, 43, 0.34),
-    0 4rpx 12rpx rgba(217, 154, 43, 0.20);
+    0 16rpx 40rpx rgba(217, 154, 43, 0.42),
+    0 4rpx 12rpx rgba(217, 154, 43, 0.22);
   transition:
     transform 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
     box-shadow 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
@@ -304,10 +317,10 @@ page {
   box-shadow:
     inset 0 1rpx 0 rgba(255, 255, 255, 0.30),
     inset 0 -1rpx 0 rgba(140, 86, 14, 0.18),
-    0 8rpx 18rpx rgba(217, 154, 43, 0.24);
+    0 8rpx 18rpx rgba(217, 154, 43, 0.28);
 }
 
-/* ============ Stats · 三个暗玻璃统计控件 ============ */
+/* ============ Stats · 三个小玻璃控件（iOS 风小尺寸） ============ */
 .stats-row {
   display: flex;
   gap: 14rpx;
@@ -324,13 +337,15 @@ page {
   align-items: center;
   gap: 4rpx;
   overflow: hidden;
-  background: rgba(15, 20, 16, 0.38);
+  background: linear-gradient(180deg,
+    rgba(16, 24, 18, 0.50) 0%,
+    rgba(10, 16, 12, 0.40) 100%);
   border: 1rpx solid rgba(255, 255, 255, 0.18);
   box-shadow:
-    0 18rpx 40rpx rgba(0, 0, 0, 0.28),
+    0 18rpx 44rpx rgba(0, 0, 0, 0.30),
     0 4rpx 10rpx rgba(0, 0, 0, 0.18),
-    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.20),
-    inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.05);
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.24),
+    inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(26rpx) saturate(1.20);
   -webkit-backdrop-filter: blur(26rpx) saturate(1.20);
 }
@@ -352,15 +367,15 @@ page {
   z-index: 1;
   font-size: 44rpx;
   font-weight: 700;
-  color: #F7EFD9;
+  color: #F8F3E8;
   letter-spacing: 0.3rpx;
   line-height: 1.2;
   font-feature-settings: "tnum";
 }
 
-/* 正确率：柔和薄荷绿，非荧光绿 */
+/* 正确率：柔和薄荷绿 */
 .stat-num--mint {
-  color: #6FD39A;
+  color: #69D99A;
 }
 
 .stat-label {
@@ -368,12 +383,12 @@ page {
   z-index: 1;
   font-size: 22rpx;
   font-weight: 500;
-  color: rgba(245, 239, 226, 0.58);
+  color: rgba(248, 243, 232, 0.62);
   letter-spacing: 1rpx;
   margin-top: 2rpx;
 }
 
-/* ============ Path Panel · 训练路径 弱一档暗玻璃 ============ */
+/* ============ Path Panel · 训练路径 弱一档玻璃面板 ============ */
 .path-panel {
   position: relative;
   border-radius: 30rpx;
@@ -382,12 +397,14 @@ page {
   flex-direction: column;
   gap: 18rpx;
   overflow: hidden;
-  background: rgba(15, 20, 16, 0.34);
+  background: linear-gradient(180deg,
+    rgba(16, 24, 18, 0.42) 0%,
+    rgba(10, 16, 12, 0.32) 100%);
   border: 1rpx solid rgba(255, 255, 255, 0.16);
   box-shadow:
     0 18rpx 44rpx rgba(0, 0, 0, 0.26),
     0 4rpx 10rpx rgba(0, 0, 0, 0.18),
-    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.18),
+    inset 0 1rpx 1rpx rgba(255, 255, 255, 0.22),
     inset 0 -1rpx 1rpx rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(28rpx) saturate(1.18);
   -webkit-backdrop-filter: blur(28rpx) saturate(1.18);
@@ -399,7 +416,7 @@ page {
   z-index: 1;
   font-size: 26rpx;
   font-weight: 600;
-  color: rgba(245, 239, 226, 0.78);
+  color: rgba(248, 243, 232, 0.82);
   letter-spacing: 1.5rpx;
 }
 
@@ -420,7 +437,7 @@ page {
 .panel-num {
   font-size: 22rpx;
   font-weight: 700;
-  color: #F0C57A;
+  color: #E8B84A;
   letter-spacing: 1rpx;
   width: 44rpx;
   flex-shrink: 0;
@@ -429,12 +446,12 @@ page {
 
 .panel-text {
   font-size: 26rpx;
-  color: rgba(245, 239, 226, 0.86);
+  color: rgba(248, 243, 232, 0.82);
   line-height: 1.5;
   letter-spacing: 0.2rpx;
 }
 
-/* ============ Profile Link · 暗玻璃文字胶囊 ============ */
+/* ============ Profile Link · 弱玻璃文字胶囊 ============ */
 .profile-link {
   margin: 4rpx auto 0;
   padding: 16rpx 36rpx;
@@ -443,11 +460,13 @@ page {
   justify-content: center;
   border-radius: 999rpx;
   border-radius: var(--radius-pill, 999rpx);
-  background: rgba(15, 20, 16, 0.34);
+  background: linear-gradient(180deg,
+    rgba(16, 24, 18, 0.40) 0%,
+    rgba(10, 16, 12, 0.30) 100%);
   border: 1rpx solid rgba(255, 255, 255, 0.16);
   box-shadow:
     0 10rpx 24rpx rgba(0, 0, 0, 0.22),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.14);
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(20rpx) saturate(1.12);
   -webkit-backdrop-filter: blur(20rpx) saturate(1.12);
   transition:
@@ -458,12 +477,14 @@ page {
 
 .profile-link--press {
   opacity: 0.86;
-  background: rgba(15, 20, 16, 0.50);
+  background: linear-gradient(180deg,
+    rgba(16, 24, 18, 0.56) 0%,
+    rgba(10, 16, 12, 0.46) 100%);
 }
 
 .profile-link-text {
   font-size: 24rpx;
-  color: rgba(245, 239, 226, 0.82);
+  color: rgba(248, 243, 232, 0.82);
   letter-spacing: 1.2rpx;
 }
 
